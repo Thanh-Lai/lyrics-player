@@ -6,8 +6,24 @@
       "node": true
     },
     "rules": {
+      "indent": ["error", 4],
       "no-console": "off",
+      "no-labels": "off",
       "comma-dangle": "off",
-      "react/jsx-filename-extension": "off"
+      "no-continue": "off",
+      "no-useless-return": "off",
+      "dot-notation": "off",
+      "react/destructuring-assignment": "off",
+      "prefer-destructuring": "off",
+      "react/prop-types": "off",
+      "react/jsx-filename-extension": [
+          "error",
+          {
+            "extensions": [".js", ".jsx"]
+          }
+      ],
+      "react/jsx-indent":[4.4],
+      "arrow-body-style": ["error", "as-needed", { "requireReturnForObjectLiteral": true }],
+      "no-plusplus": [2, { "allowForLoopAfterthoughts": true }]
     }
   }
