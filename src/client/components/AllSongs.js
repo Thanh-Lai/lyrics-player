@@ -7,7 +7,7 @@ export default function Spinner({ matchedResults, clicked }) {
     if (promiseInProgress) return (<div className="loaderRing" />);
     if (clicked && !Object.keys(matchedResults).length) return (<div className="songContainer" id="noData">No Song Found</div>);
     return (
-        <div id="containers" style={{ display: 'block' }}>
+        <div id="containers">
             {Object.keys(matchedResults).map((key) => {
                 const currSong = matchedResults[key];
                 if (currSong.id) {
