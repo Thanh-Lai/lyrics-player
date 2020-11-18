@@ -21,6 +21,10 @@
       "import/prefer-default-export": "off",
       "react/jsx-indent-props": "off",
       "no-param-reassign": "off",
+      "arrow-body-style": "off",
+      "consistent-return": "off",
+      "array-callback-return": "off",
+      "max-len": "off",
       "react/jsx-filename-extension": [
           "error",
           {
@@ -28,7 +32,6 @@
           }
       ],
       "react/jsx-indent":[4.4],
-      "arrow-body-style": ["error", "as-needed", { "requireReturnForObjectLiteral": true }],
       "no-plusplus": [2, { "allowForLoopAfterthoughts": true }]
     }
   }

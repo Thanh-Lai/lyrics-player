@@ -1,10 +1,26 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-export default function TextSearch({ onSubmit }) {
-    return (
-        <form onSubmit={event => onSubmit(event)}>
-            <input id="inputValue" type="text" />
-            <input type="submit" value="Submit" />
-        </form>
-    );
+export default class TextSearch extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { value: 'lyrics' };
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    handleChange(event) {
+        this.setState({ value: event.target.value });
+    }
+
+    render() {
+        return (
+            <form onSubmit={event => this.props.onSubmit(event).option}>
+                <select value={this.state.value} onChange={this.handleChange} name="textType" id="textType">
+                    <option value="lyric">Lyric</option>
+                    <option value="song">Song Title</option>
+                </select>
+                <input placeholder="Search lyric or song title..." id="inputValue" type="textbox" style={{ width: '400px' }} />
+                <input type="submit" value="Submit" />
+            </form>
+        );
+    }
 }

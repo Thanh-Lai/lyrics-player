@@ -1,7 +1,7 @@
 body {
     text-align: center;
     margin: auto;
-    /* background-color: #d8ecf3 */
+    background-color: #212121;
 }
 
 #box {
@@ -10,9 +10,8 @@ body {
 .gradient-border {
     position: relative;
     margin: auto;
-    width: 50%;
-    width: 70vw;
-    height: 400px;
+    width: 60vw;
+    height: 200px;
     background: linear-gradient(0deg, white, #D3D3D3);
   }
 .gradient-border:before, .gradient-border:after {
@@ -53,7 +52,59 @@ body {
 
 .tabcontent {
     display: none;
-    padding: 6px 12px;
-    border: 1px solid #ccc;
+    padding: 10px 6px 0px 12px;
     border-top: none;
+}
+
+.active {
+    background-color: lightblue;
+}
+
+#noData {
+    margin-top: 100px;
+    padding-bottom: 10px;
+}
+
+#containers{
+    margin-top: 100px;
+}
+
+.songContainer {
+    width: 50vw;
+    margin: 10px auto 10px auto;
+    padding-top: 10px;
+    background-color: #D3D3D3;
+}
+
+.songContent {
+    text-align: left;
+    padding: 0 5px 0 15px;
+}
+
+.loaderRing {
+    display: inline-block;
+    margin: 100px auto 10px auto;
+    width: 80px;
+    height: 80px;
+  }
+
+.loaderRing:after {
+    content: " ";
+    display: block;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    border-radius: 50%;
+    border: 6px solid #fff;
+    border-color: #fff transparent #fff transparent;
+    animation: loaderRing 1.2s linear infinite;
+}
+
+@keyframes loaderRing {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
 }

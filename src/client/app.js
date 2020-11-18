@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { SearchBox } from './components';
+import { trackPromise } from 'react-promise-tracker';
+import { SearchBox, AllSongs } from './components';
 import './app.css';
 import { API_KEY } from '../../secrets';
 
@@ -8,30 +9,34 @@ export default class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            matchedResults: {}
+            matchedResults: {},
+            clicked: false
         };
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     async handleSubmit(event) {
-        const songOrLyric = 'lyrics'; // temp variable
+        const songOrLyric = document.getElementById('textType').value;
         event.preventDefault();
         const { value } = event.target.inputValue;
         if (!value) return;
         const uriEncodeInput = encodeURI(value);
-        const result = await axios.get(`http://localhost:23450/textSearch?query=${uriEncodeInput}&type=${songOrLyric}`, {
+        const result = await trackPromise(axios.get(`http://localhost:23450/textSearch?query=${uriEncodeInput}&type=${songOrLyric}`, {
             headers: {
                 Authorization: API_KEY,
             }
+        }));
+        this.setState({
+            matchedResults: result.data,
+            clicked: true
         });
-        this.setState({ matchedResults: result.data });
     }
 
     render() {
-        console.log('render', this.state.matchedResults);
         return (
             <div>
                 <SearchBox onSubmit={this.handleSubmit} />
+                <AllSongs clicked={this.state.clicked} matchedResults={this.state.matchedResults} />
             </div>
         );
     }
