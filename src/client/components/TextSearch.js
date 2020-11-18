@@ -19,7 +19,7 @@ export default class TextSearch extends Component {
                     <option value="song">Song Title</option>
                 </select>
                 <input placeholder="Search lyric or song title..." id="inputValue" type="textbox" style={{ width: '400px' }} />
-                <input type="submit" value="Submit" />
+                <button id="searchBtn" type="submit"><i className="fa fa-search" /></button>
             </form>
         );
     }

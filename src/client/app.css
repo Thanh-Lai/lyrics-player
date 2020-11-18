@@ -68,6 +68,18 @@ body {
     }
 }
 
+#searchBtn {
+    background-color: #1DB954;
+}
+
+#searchBtn:hover {
+    background-color: #37d878;
+}
+
+.search {
+    height: 30px;
+}
+
 .gradientBorder:after {
     filter: blur(50px);
 }
