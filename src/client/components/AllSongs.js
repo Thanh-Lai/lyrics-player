@@ -5,7 +5,7 @@ import Container from './Container';
 export default function Spinner({ matchedResults, clicked }) {
     const { promiseInProgress } = usePromiseTracker();
     if (promiseInProgress) return (<div className="loaderRing" />);
-    if (clicked && !Object.keys(matchedResults).length) return (<div className="songContainer" id="noData">No Data Found</div>);
+    if (clicked && !Object.keys(matchedResults).length) return (<div className="songContainer" id="noData">No Song Found</div>);
     return (
         <div id="containers" style={{ display: 'block' }}>
             {Object.keys(matchedResults).map((key) => {
