@@ -4,17 +4,45 @@ body {
     background-color: #212121;
 }
 
+::selection {
+    background-color: #1DB954;
+    color: #fff;
+}
+
+/*** Mozilla based browsers ***/
+::-moz-selection {
+    background-color: #1DB954;
+    color: #fff;
+}
+
+/***For Other Browsers ***/
+::-o-selection {
+    background-color: #1DB954;
+    color: #fff;
+}
+
+::-ms-selection {
+    background-color: #1DB954;
+    color: #fff;
+}
+
+/*** For Webkit ***/
+::-webkit-selection {
+    background-color: #1DB954;
+    color: #fff;
+}
+
 #box {
     margin-top:100px;
 }
-.gradient-border {
+.gradientBorder {
     position: relative;
     margin: auto;
     width: 60vw;
     height: 200px;
     background: linear-gradient(0deg, white, #D3D3D3);
   }
-.gradient-border:before, .gradient-border:after {
+.gradientBorder:before, .gradientBorder:after {
     content: '';
     position: absolute;
     left: -2px;
@@ -40,7 +68,7 @@ body {
     }
 }
 
-.gradient-border:after {
+.gradientBorder:after {
     filter: blur(50px);
 }
 
@@ -50,14 +78,14 @@ body {
     background-color: #f1f1f1;
 }
 
-.tabcontent {
+.tabContent {
     display: none;
     padding: 10px 6px 0px 12px;
     border-top: none;
 }
 
 .active {
-    background-color: lightblue;
+    background-color: #1DB954;
 }
 
 #noData {

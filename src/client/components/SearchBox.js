@@ -8,15 +8,15 @@ export default class SearchBox extends Component {
     }
 
     handleChangeTab(event, cityName) {
-        let tabcontent = [];
-        let tablinks = [];
-        tabcontent = document.getElementsByClassName('tabcontent');
-        for (let i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = 'none';
+        let tabContent = [];
+        let tabLink = [];
+        tabContent = document.getElementsByClassName('tabContent');
+        for (let i = 0; i < tabContent.length; i++) {
+            tabContent[i].style.display = 'none';
         }
-        tablinks = document.getElementsByClassName('tablinks');
-        for (let i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(' active', '');
+        tabLink = document.getElementsByClassName('tabLink');
+        for (let i = 0; i < tabLink.length; i++) {
+            tabLink[i].className = tabLink[i].className.replace(' active', '');
         }
         document.getElementById(cityName).style.display = 'block';
         event.currentTarget.className += ' active';
@@ -24,19 +24,19 @@ export default class SearchBox extends Component {
 
     render() {
         return (
-            <div id="box" className="gradient-border">
+            <div id="box" className="gradientBorder">
                 <div className="tab">
-                    <button type="button" className="tablinks active" onClick={(event) => { this.handleChangeTab(event, 'textSearch'); }}>Text Search</button>
-                    <button type="button" className="tablinks" onClick={(event) => { this.handleChangeTab(event, 'audioSearch'); }}>Audio Search</button>
-                    <button type="button" className="tablinks" onClick={(event) => { this.handleChangeTab(event, 'instructions'); }}>Instructions</button>
+                    <button type="button" className="tabLink active" onClick={(event) => { this.handleChangeTab(event, 'textSearch'); }}>Text Search</button>
+                    <button type="button" className="tabLink" onClick={(event) => { this.handleChangeTab(event, 'audioSearch'); }}>Audio Search</button>
+                    <button type="button" className="tabLink" onClick={(event) => { this.handleChangeTab(event, 'instructions'); }}>Instructions</button>
                 </div>
-                <div id="textSearch" className="tabcontent" style={{ display: 'block' }}>
+                <div id="textSearch" className="tabContent" style={{ display: 'block' }}>
                     <TextSearch onSubmit={this.props.onSubmit} />
                 </div>
-                <div id="audioSearch" className="tabcontent">
+                <div id="audioSearch" className="tabContent">
                     Coming Soon
                 </div>
-                <div id="instructions" className="tabcontent">
+                <div id="instructions" className="tabContent">
                     Instructions Here
                 </div>
             </div>
