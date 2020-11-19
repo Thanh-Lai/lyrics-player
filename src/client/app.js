@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { trackPromise } from 'react-promise-tracker';
-import { SearchBox, AllSongs } from './components';
+import { SearchBox, AllSongs, Navbar } from './components';
 import './app.css';
 import { API_KEY } from '../../secrets';
 
@@ -13,6 +13,7 @@ export default class App extends Component {
             clicked: false
         };
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleLogin = this.handleLogin.bind(this);
     }
 
     async handleSubmit(event) {
@@ -32,9 +33,15 @@ export default class App extends Component {
         });
     }
 
+    handleLogin() {
+        console.log('uwu');
+    }
+
     render() {
+        console.log('TTT', this.state.matchedResults);
         return (
             <div>
+                <Navbar />
                 <SearchBox onSubmit={this.handleSubmit} />
                 <AllSongs clicked={this.state.clicked} matchedResults={this.state.matchedResults} />
             </div>

@@ -96,6 +96,10 @@ body {
     border-top: none;
 }
 
+.tabLink:hover {
+    background-color: #37d878;
+}
+
 .active {
     background-color: #1DB954;
 }
@@ -147,4 +151,36 @@ body {
     100% {
       transform: rotate(360deg);
     }
+}
+
+#navigation {
+    line-height: 50px;
+  }
+
+header {
+    background-color: black;
+    z-index: 1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 55px;
+}
+
+header * {
+    display: inline;
+}
+
+header li {
+    margin: 20px;
+}
+
+header li a {
+    margin-top:50px;
+    color: white;
+    text-decoration: none;
+}
+
+header li a:hover {
+    color: #37d878;
 }
