@@ -38,7 +38,6 @@ export default class App extends Component {
     }
 
     render() {
-        console.log('TTT', this.state.matchedResults);
         return (
             <div>
                 <Navbar />

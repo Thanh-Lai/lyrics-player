@@ -4,14 +4,15 @@ import Container from './Container';
 
 export default function Spinner({ matchedResults, clicked }) {
     const { promiseInProgress } = usePromiseTracker();
+    const orderedSongs = Object.values(matchedResults).sort((a, b) => a.levenshteinDistance - b.levenshteinDistance);
     if (promiseInProgress) return (<div className="loaderRing" />);
-    if (clicked && !Object.keys(matchedResults).length) return (<div className="songContainer" id="noData">No Song Found</div>);
+    if (clicked && !orderedSongs.length) return (<div className="songContainer" id="noData">No Song Found</div>);
     return (
         <div id="containers">
-            {Object.keys(matchedResults).map((key) => {
-                const currSong = matchedResults[key];
-                if (currSong.id) {
-                    return <Container key={key} songInfo={currSong} />;
+            {orderedSongs.map((elem) => {
+                const currSong = elem.id ? matchedResults[elem.id] : false;
+                if (currSong) {
+                    return <Container key={elem.id} songInfo={currSong} />;
                 }
             })}
         </div>
