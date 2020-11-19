@@ -37,7 +37,8 @@ export default class SearchBox extends Component {
                     Coming Soon
                 </div>
                 <div id="instructions" className="tabContent">
-                    Instructions Here
+                    Instructions Here. Important: The Web Player is currently in Beta. The content and functionality may change without warning in future versions.
+                    Please report should the player no longer works.
                 </div>
             </div>
         );
