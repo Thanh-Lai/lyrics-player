@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { trackPromise } from 'react-promise-tracker';
-import { SearchBox, AllSongs, Navbar } from './index';
+import { SearchBox, AllSongs } from './index';
 import '../app.css';
 import { API_KEY } from '../../../secrets';
 
@@ -13,7 +13,6 @@ export default class App extends Component {
             clicked: false
         };
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleLogin = this.handleLogin.bind(this);
     }
 
     async handleSubmit(event) {
@@ -22,7 +21,7 @@ export default class App extends Component {
         const { value } = event.target.inputValue;
         if (!value) return;
         const uriEncodeInput = encodeURI(value);
-        const result = await trackPromise(axios.get(`http://localhost:23450/textSearch?query=${uriEncodeInput}&type=${songOrLyric}`, {
+        const result = await trackPromise(axios.get(`http://localhost:8888/textSearch?query=${uriEncodeInput}&type=${songOrLyric}`, {
             headers: {
                 Authorization: API_KEY,
             }
@@ -33,14 +32,9 @@ export default class App extends Component {
         });
     }
 
-    handleLogin() {
-        console.log('uwu');
-    }
-
     render() {
         return (
             <div>
-                <Navbar />
                 <SearchBox onSubmit={this.handleSubmit} />
                 <AllSongs clicked={this.state.clicked} matchedResults={this.state.matchedResults} />
             </div>

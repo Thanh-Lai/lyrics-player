@@ -179,11 +179,30 @@ header li a {
     margin-top:50px;
     color: white;
     text-decoration: none;
+    font-family: "Lucida Console", Courier, monospace;
 }
 
 header li a:hover {
     color: #37d878;
 }
-#contact{
+
+#loginBtn {
+    color: white;
+    background: none;
+    border: none;
+    outline:none;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: "Lucida Console", Courier, monospace;
+}
+
+#loginBtn:hover {
+    color: #37d878;
+}
+
+.marginTop{
+    color: white;
     margin-top: 100px;
 }
+
+

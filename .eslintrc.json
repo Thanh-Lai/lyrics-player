@@ -25,6 +25,7 @@
       "consistent-return": "off",
       "array-callback-return": "off",
       "max-len": "off",
+      "prefer-template" : "off",
       "react/jsx-filename-extension": [
           "error",
           {

@@ -14,7 +14,6 @@ if (process.env.NODE_ENV !== 'production') {
 const createApp = () => {
     // logging middleware
     app.use(morgan('dev'));
-
     // body parsing middleware
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
@@ -39,6 +38,7 @@ const createApp = () => {
     app.use('*', (req, res) => {
         res.sendFile(path.join(__dirname, '../../', 'public/index.html'));
     });
+
 
     // error handling endware
     app.use((err, req, res) => {
