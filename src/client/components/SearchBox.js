@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import TextSearch from './TextSearch';
+import { TextSearch, Instructions } from './index';
 
 export default class SearchBox extends Component {
     constructor(props) {
@@ -37,8 +37,7 @@ export default class SearchBox extends Component {
                     Coming Soon
                 </div>
                 <div id="instructions" className="tabContent">
-                    Instructions Here. Important: The Web Player is currently in Beta. The content and functionality may change without warning in future versions.
-                    Please report should the player no longer works.
+                    <Instructions />
                 </div>
             </div>
         );

@@ -2,6 +2,7 @@ body {
     text-align: center;
     margin: auto;
     background-color: #212121;
+    font-family: "Lucida Console", Courier, monospace;
 }
 
 ::selection {
@@ -179,7 +180,6 @@ header li a {
     margin-top:50px;
     color: white;
     text-decoration: none;
-    font-family: "Lucida Console", Courier, monospace;
 }
 
 header li a:hover {
@@ -193,7 +193,6 @@ header li a:hover {
     outline:none;
     cursor: pointer;
     text-decoration: none;
-    font-family: "Lucida Console", Courier, monospace;
 }
 
 #loginBtn:hover {
@@ -205,4 +204,29 @@ header li a:hover {
     margin-top: 100px;
 }
 
+#profilePic {
+    vertical-align: middle;
+    padding-right: 5px;
+    border-radius: 50%;
+    width: 30px;
+    height: auto;
+}
 
+#user {
+    padding-right: 20px;
+    float: right;
+    color: white;
+    font-size: 10px;
+    font-family: "Lucida Console", Courier, monospace;
+}
+
+#instructionText {
+    overflow: auto;
+    text-align: left;
+    font-size: 15px;
+    height: 150px;
+}
+
+.breakSpace {
+    padding: 2px;
+}

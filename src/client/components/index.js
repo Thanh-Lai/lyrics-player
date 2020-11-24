@@ -5,3 +5,5 @@ export { default as AllSongs } from './AllSongs';
 export { default as Navbar } from './Navbar';
 export { default as Contact } from './Contact';
 export { default as Home } from './Home';
+export { default as LoggingButton } from './LoggingButton';
+export { default as Instructions } from './Instructions';
