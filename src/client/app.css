@@ -5,6 +5,18 @@ body {
     font-family: "Lucida Console", Courier, monospace;
 }
 
+input, textarea, select {
+    height : 35px;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    border-radius:10px;
+    font-family: "Lucida Console", Courier, monospace;
+    font-size: 12px;
+    border:0;
+    box-shadow:0 0 15px 4px #37d878;
+  }
+
 ::selection {
     background-color: #1DB954;
     color: #fff;
@@ -71,6 +83,11 @@ body {
 
 #searchBtn {
     background-color: #1DB954;
+    height: 35px;
+    border-radius:10px;
+    border:0;
+    margin-left: 5px;
+
 }
 
 #searchBtn:hover {
@@ -95,6 +112,11 @@ body {
     display: none;
     padding: 10px 6px 0px 12px;
     border-top: none;
+}
+
+.tabLink {
+    font-family: "Lucida Console", Courier, monospace;
+    margin: 2px 0 2px 0;
 }
 
 .tabLink:hover {
@@ -229,4 +251,15 @@ header li a:hover {
 
 .breakSpace {
     padding: 2px;
+}
+
+#textSearchForm {
+    position: absolute;
+    top: 40%;
+    width: 100%;
+}
+
+#inputValue {
+    padding: 0 10px 0 10px;
+    margin: 0 5px 0 5px;
 }
