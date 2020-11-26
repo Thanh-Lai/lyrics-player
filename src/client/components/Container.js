@@ -1,6 +1,7 @@
 import React from 'react';
+import Player from './Player';
 
-export default function Container({ songInfo }) {
+export default function Container({ songInfo, token }) {
     return (
         <div className="songContainer">
             <div className="songContent">
@@ -28,6 +29,7 @@ export default function Container({ songInfo }) {
                 <a value="songInfo.lyricsURL" href={songInfo.lyricsURL} target="_blank" rel="noreferrer">{songInfo.lyricsURL}</a>
             </div>
             <br />
+            <Player logged={Object.keys(token).length} token={token} songInfo={songInfo} />
         </div>
     );
 }

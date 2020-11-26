@@ -7,3 +7,4 @@ export { default as Contact } from './Contact';
 export { default as Home } from './Home';
 export { default as LoggingButton } from './LoggingButton';
 export { default as Instructions } from './Instructions';
+export { default as Player } from './Player';

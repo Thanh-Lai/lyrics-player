@@ -26,6 +26,7 @@
       "array-callback-return": "off",
       "max-len": "off",
       "prefer-template" : "off",
+      "camelcase": "off",
       "react/jsx-filename-extension": [
           "error",
           {

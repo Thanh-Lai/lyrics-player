@@ -14,7 +14,6 @@ input, textarea, select {
     font-family: "Lucida Console", Courier, monospace;
     font-size: 12px;
     border:0;
-    box-shadow:0 0 15px 4px #37d878;
   }
 
 ::selection {
@@ -117,6 +116,7 @@ input, textarea, select {
 .tabLink {
     font-family: "Lucida Console", Courier, monospace;
     margin: 2px 0 2px 0;
+    padding: 3px 5px 3px 5px;
 }
 
 .tabLink:hover {
@@ -215,6 +215,7 @@ header li a:hover {
     outline:none;
     cursor: pointer;
     text-decoration: none;
+    font-family: "Lucida Console", Courier, monospace;
 }
 
 #loginBtn:hover {
@@ -262,4 +263,38 @@ header li a:hover {
 #inputValue {
     padding: 0 10px 0 10px;
     margin: 0 5px 0 5px;
+    box-shadow:0 0 15px 4px #37d878;
 }
+
+.songControls {
+    justify-content: center;
+    display: flex;
+    margin-top: 20px;
+  }
+
+.play-btn {
+    padding: 0 5px;
+    color: rgb(179, 179, 179);
+    cursor: pointer;
+}
+.song-player-container {
+
+    background-color: #505050;
+}
+.song-player-container .play-btn {
+    position: relative;
+    top: 1px;
+    font-size: 40px;
+    margin: 0 5px;
+}
+
+.song-player-container .pause-btn {
+    position: relative;
+    top: 1px;
+    font-size: 40px;
+    margin: 0 5px;
+  }
+  
+  .play-btn .fa {
+    -webkit-text-stroke: 4px #505050;
+  }

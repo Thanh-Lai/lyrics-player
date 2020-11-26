@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { TextSearch, Instructions } from './index';
+import TextSearch from './TextSearch';
+import Instructions from './Instructions';
 
 export default class SearchBox extends Component {
     constructor(props) {

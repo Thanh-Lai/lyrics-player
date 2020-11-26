@@ -10,9 +10,21 @@ export default class App extends Component {
         super(props);
         this.state = {
             matchedResults: {},
+            token: '',
             clicked: false
         };
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    componentDidMount() {
+        axios.get('http://localhost:8888/auth/accessToken', {
+            headers: {
+                Authorization: API_KEY
+            }
+        })
+            .then((data) => {
+                this.setState({ token: data.data });
+            });
     }
 
     async handleSubmit(event) {
@@ -36,7 +48,7 @@ export default class App extends Component {
         return (
             <div>
                 <SearchBox onSubmit={this.handleSubmit} />
-                <AllSongs clicked={this.state.clicked} matchedResults={this.state.matchedResults} />
+                <AllSongs token={this.state.token} clicked={this.state.clicked} matchedResults={this.state.matchedResults} />
             </div>
         );
     }
