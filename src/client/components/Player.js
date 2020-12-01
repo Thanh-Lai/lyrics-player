@@ -21,6 +21,9 @@ class Player extends Component {
     }
 
     componentWillUnmount() {
+        if (this.player) {
+            this.player.disconnect();
+        }
         this.props.updatePlayer({});
     }
 
@@ -85,16 +88,14 @@ class Player extends Component {
 
 
     checkForPlayer() {
-        const { token, updatePlayer } = this.props;
+        const { token } = this.props;
         if (window.Spotify) {
             clearInterval(this.playerCheckInterval);
             this.player = new window.Spotify.Player({
                 name: 'Spotify Lyrics Player',
                 getOAuthToken: (cb) => { cb(token); }
             });
-            const currPlayList = { ...this.props.players };
             this.createEventHandlers();
-            updatePlayer(currPlayList);
             this.player.connect();
         }
     }
@@ -120,6 +121,7 @@ class Player extends Component {
     }
 
     render() {
+        if (!Object.keys(this.props.players).length) return null;
         const uri = this.props.uri;
         const status = this.props.players[uri]['playing'] ? 'fa fa-pause-circle-o pause-btn' : 'fa fa-play-circle-o play-btn';
         return (

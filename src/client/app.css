@@ -278,7 +278,6 @@ header li a:hover {
     cursor: pointer;
 }
 .song-player-container {
-
     background-color: #505050;
 }
 .song-player-container .play-btn {
@@ -301,5 +300,5 @@ header li a:hover {
 
 #noPlayer{
     padding: 10px 0 10px 0;
-    color: whitesmoke;
+    color: #D3D3D3;
 }

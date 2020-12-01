@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { trackPromise } from 'react-promise-tracker';
+import { connect } from 'react-redux';
 import { SearchBox, AllSongs } from './index';
+import { updatePlayers } from '../store';
 import '../app.css';
 import { API_KEY } from '../../../secrets';
 
-export default class App extends Component {
+class Home extends Component {
+    isMounted = false;
+
     constructor(props) {
         super(props);
         this.state = {
@@ -17,14 +21,23 @@ export default class App extends Component {
     }
 
     componentDidMount() {
+        this.isMounted = true;
         axios.get('http://localhost:8888/auth/accessToken', {
             headers: {
                 Authorization: API_KEY
             }
         })
             .then((data) => {
-                this.setState({ token: data.data });
+                if (this.isMounted) {
+                    this.setState({
+                        token: data.data
+                    });
+                }
             });
+    }
+
+    componentWillUnmount() {
+        this.isMounted = false;
     }
 
     async handleSubmit(event) {
@@ -38,10 +51,20 @@ export default class App extends Component {
                 Authorization: API_KEY,
             }
         }));
-        this.setState({
-            matchedResults: result.data,
-            clicked: true
-        });
+        if (this.isMounted) {
+            this.setState({
+                matchedResults: result.data,
+                clicked: true
+            });
+            const playList = {};
+            Object.values(result.data).forEach((elem) => {
+                if (elem.id && elem.spotifyUri) {
+                    playList[elem.spotifyUri] = {};
+                    playList[elem.spotifyUri]['playing'] = false;
+                }
+            });
+            this.props.updatePlayersOnFetch(playList);
+        }
     }
 
     render() {
@@ -53,3 +76,13 @@ export default class App extends Component {
         );
     }
 }
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        updatePlayersOnFetch: (players) => {
+            dispatch(updatePlayers(players));
+        }
+    };
+};
+
+export default connect(null, mapDispatchToProps)(Home);
