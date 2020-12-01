@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { updatePlayers } from '../store';
 
-export default class Player extends Component {
+class Player extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            hasTrack: true,
             token: "",
             deviceId: "",
             loggedIn: false,
-            playing: false,
             position: 0,
             duration: 0,
         };
@@ -16,19 +16,23 @@ export default class Player extends Component {
     }
 
     componentDidMount() {
-        console.log('spot', window.Spotify);
+        // If every sec if player is ready
         this.playerCheckInterval = setInterval(() => this.checkForPlayer(), 1000);
     }
 
+    componentWillUnmount() {
+        this.props.updatePlayer({});
+    }
+
     onPlayClick() {
-        console.log('playing ', this.state.playing);
-        if (!this.state.playing) {
+        const uri = this.props.uri;
+        if (this.props.players[uri]['playing']) {
+            this.player.togglePlay();
+        } else {
             this.play({
                 playerInstance: this.player,
-                spotify_uri: this.props.songInfo.spotifyUri
+                spotify_uri: uri
             });
-        } else {
-            this.player.togglePlay();
         }
     }
 
@@ -38,13 +42,22 @@ export default class Player extends Component {
             const {
                 position,
                 duration,
+                current_track
             } = state.track_window;
-            const playing = !state.paused;
-            this.setState({
-                position,
-                duration,
-                playing
+            const currPlayList = { ...this.props.players };
+            const uri = current_track.uri;
+            const playList = {};
+            Object.keys(currPlayList).forEach((elem) => {
+                playList[elem] = {};
+                playList[elem]['playing'] = (elem === uri) ? !state.paused : false;
             });
+            if (uri) {
+                this.props.updatePlayer(playList);
+                this.setState({
+                    position,
+                    duration
+                });
+            }
         }
     }
 
@@ -72,14 +85,16 @@ export default class Player extends Component {
 
 
     checkForPlayer() {
-        const { token } = this.props;
-        if (window.Spotify !== null) {
+        const { token, updatePlayer } = this.props;
+        if (window.Spotify) {
             clearInterval(this.playerCheckInterval);
             this.player = new window.Spotify.Player({
                 name: 'Spotify Lyrics Player',
                 getOAuthToken: (cb) => { cb(token); }
             });
+            const currPlayList = { ...this.props.players };
             this.createEventHandlers();
+            updatePlayer(currPlayList);
             this.player.connect();
         }
     }
@@ -100,25 +115,37 @@ export default class Player extends Component {
         this.player.on('ready', (data) => {
             const { device_id } = data;
             console.log(`Device ${device_id}`);
-            console.log(this.props, 'handler')
             this.setState({ deviceId: device_id });
         });
     }
 
     render() {
-        const status = this.state.playing ? 'fa fa-pause-circle-o pause-btn' : 'fa fa-play-circle-o play-btn';
+        const uri = this.props.uri;
+        const status = this.props.players[uri]['playing'] ? 'fa fa-pause-circle-o pause-btn' : 'fa fa-play-circle-o play-btn';
         return (
             <div className="song-player-container">
-                {!this.state.hasTrack ? <div>No Track Found</div>
-                    : (
-                        <div className="songControls">
-                            <div className="play-btn">
-                                <i onClick={() => this.onPlayClick()} className={'fa play-btn' + status} aria-hidden="true" />
-                            </div>
-                        </div>
-                    )
-                }
+                <div className="songControls">
+                    <div className="play-btn">
+                        <i onClick={() => this.onPlayClick()} className={'fa play-btn' + status} aria-hidden="true" />
+                    </div>
+                </div>
             </div>
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        players: state.players
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        updatePlayer: (players) => {
+            dispatch(updatePlayers(players));
+        }
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Player);

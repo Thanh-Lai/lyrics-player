@@ -1,5 +1,6 @@
 import React from 'react';
 import Player from './Player';
+import NoPlayer from './NoPlayer';
 
 export default function Container({ songInfo, token }) {
     return (
@@ -29,7 +30,10 @@ export default function Container({ songInfo, token }) {
                 <a value="songInfo.lyricsURL" href={songInfo.lyricsURL} target="_blank" rel="noreferrer">{songInfo.lyricsURL}</a>
             </div>
             <br />
-            <Player logged={Object.keys(token).length} token={token} songInfo={songInfo} />
+            {(token === 'No Token' || !songInfo.spotifyUri)
+                ? <NoPlayer token={token} />
+                : <Player logged={token} token={token} uri={songInfo.spotifyUri} />
+            }
         </div>
     );
 }

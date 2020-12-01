@@ -298,3 +298,8 @@ header li a:hover {
   .play-btn .fa {
     -webkit-text-stroke: 4px #505050;
   }
+
+#noPlayer{
+    padding: 10px 0 10px 0;
+    color: whitesmoke;
+}
