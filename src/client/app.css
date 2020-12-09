@@ -272,33 +272,116 @@ header li a:hover {
     margin-top: 20px;
   }
 
-.play-btn {
-    padding: 0 5px;
+.playBtn {
     color: rgb(179, 179, 179);
     cursor: pointer;
 }
-.song-player-container {
+
+.playerContainer {
     background-color: #505050;
 }
-.song-player-container .play-btn {
+.playerContainer .playBtn {
     position: relative;
     top: 1px;
     font-size: 40px;
     margin: 0 5px;
 }
 
-.song-player-container .pause-btn {
+.playerContainer .pauseBtn {
     position: relative;
     top: 1px;
     font-size: 40px;
     margin: 0 5px;
   }
   
-  .play-btn .fa {
+.playBtn .fa {
     -webkit-text-stroke: 4px #505050;
-  }
+}
 
-#noPlayer{
+.noPlayer{
     padding: 10px 0 10px 0;
     color: #D3D3D3;
+}
+
+.seekBar {
+    -webkit-appearance: none !important;
+    top: 20px;
+    position: relative;
+    width: 70%;
+    height: 10px;
+    background:linear-gradient(to right, #82CFD0 0%, #82CFD0 0%, #fff 0%, #fff 100%);;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+  
+.seekBar:hover {
+    opacity: 1;
+}
+  
+input[type="range"]{
+    -webkit-appearance: none !important;
+    -moz-apperance: none !important;;
+    border-radius: 6px;
+    height: 6px;
+}
+
+input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none !important;
+    background-color: #E9E9E9;
+    border: 1px solid #CECECE;
+    border-radius: 50%;
+    height: 15px;
+    width: 15px;
+    cursor: pointer;
+}
+
+.playTimes {
+    margin-top: 13px;
+    padding: 0 5px 0 5px;
+    color: #D3D3D3;
+}
+
+.volume {
+    -webkit-appearance: none;
+    border-radius: 6px;
+    position: relative;
+    transform: rotate(270deg);
+    background:black;
+    background:linear-gradient(to right, #82CFD0 0%, #82CFD0 0%, #212121 0%, #212121 100%);
+    outline: none;
+    opacity: 0;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    bottom: 75px;
+    width: 90px;
+}
+
+.volume:hover {
+    opacity: 1;
+    background: #212121;
+    background-image: -webkit-gradient(
+        linear,
+        left top,
+        right top,
+        color-stop(50%, #1DB954),
+        color-stop(50%, #212121)
+    );
+}
+
+.fa-volume-up {
+    padding-top: 10px;
+}
+
+.fa-volume-up:hover + .volume {
+    opacity: 0.7;
+    background: #212121;
+    background-image: -webkit-gradient(
+        linear,
+        left top,
+        right top,
+        color-stop(50%, #1DB954),
+        color-stop(50%, #212121)
+    );
 }

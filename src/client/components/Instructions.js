@@ -16,7 +16,7 @@ export default function Instructions() {
             <br />
             <div className="breakSpace" />
             <strong>Note: </strong>
-            The Web Player is currently in Beta. The content and functionality may change without warning in future versions.
+            The Spotify Web Player is in Beta. The content and functionality may change without warning in future versions.
             Please report should the player no longer works.
         </div>
     );
