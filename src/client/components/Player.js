@@ -7,7 +7,7 @@ class Player extends Component {
         super(props);
         this.state = {
             position: 0,
-            volumn: 50
+            volume: 50
         };
         this.playerCheckInterval = null;
         this.handleSeekBar = this.handleSeekBar.bind(this);
@@ -37,7 +37,6 @@ class Player extends Component {
     onPlayClick() {
         const uri = this.props.uri;
         const player = this.props.players[uri];
-        this.moveSlider(`volumn-${uri}`, this.state.volumn, '#212121');
         if (!player['playing']) {
             this.play({
                 playerInstance: this.player,
@@ -47,6 +46,7 @@ class Player extends Component {
             player['playTimerInterval'] = setInterval(() => {
                 this.playTimer(this.state.position, uri);
             }, 1000);
+            this.updateVolume(this.state.volume, `volume-${uri}`);
         } else {
             this.pause({
                 playerInstance: this.player,
@@ -70,11 +70,9 @@ class Player extends Component {
                     clearInterval(currPlayList[elem]['playTimerInterval']);
                 }
                 playList[elem] = {};
-                playList[elem]['init'] = (elem !== uri);
                 playList[elem]['playing'] = (elem === uri) ? !paused : false;
                 playList[elem]['duration'] = currPlayList[elem]['duration'];
                 playList[elem]['playTimerInterval'] = (elem === uri) ? currPlayList[elem]['playTimerInterval'] : null;
-                playList[elem]['player'] = this.player;
                 playList[elem]['position'] = (elem === uri) ? position : currPlayList[elem]['position'];
                 playList[elem]['ready'] = true;
 
@@ -84,54 +82,24 @@ class Player extends Component {
         }
     }
 
-    millisToMinsAndSecs(ms) {
-        const minutes = Math.floor(ms / 60000);
-        const seconds = ((ms % 60000) / 1000).toFixed(0);
-        return `${minutes}:${(seconds < 10 ? '0' : '')}${seconds}`;
-    }
-
-    playTimer(currPosition, uri) {
-        const player = this.props.players[uri];
-        if (currPosition >= (Math.floor(player['duration'] / 1000) * 1000) - 1000) {
-            clearInterval(player['playTimerInterval']);
-            this.moveSlider(`seeker-${uri}`, 0, '#C5C5C5');
-            this.setState({ position: 0 });
-            return;
+    setVolume({
+        volume,
+        playerInstance: {
+            _options: {
+                getOAuthToken,
+                id
+            }
         }
-        const position = currPosition + 1000;
-        this.setState({ position });
-        this.moveSlider(`seeker-${uri}`, currPosition, '#C5C5C5');
-    }
-
-    handleSeekBar(event, id) {
-        const roundDown = (Math.floor(event.target.value / 1000) * 1000) - 5000;
-        const value = roundDown < 0 ? 0 : roundDown;
-        const uri = this.props.uri;
-        this.moveSlider(id, value, '#C5C5C5');
-        this.play({
-            spotify_uri: uri,
-            position: Math.floor(value),
-            playerInstance: this.player
+    }) {
+        getOAuthToken((access_token) => {
+            fetch(`https://api.spotify.com/v1/me/player/volume?volume_percent=${volume}&device_id=${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${access_token}`
+                },
+            });
         });
-        this.setState({ position: Number(value) });
-    }
-
-    moveSlider(id, newVal, color) {
-        const input = document.getElementById(id);
-        input.value = newVal;
-        const val = (input.value - input.getAttribute('min')) / (input.getAttribute('max') - input.getAttribute('min'));
-        input.style.backgroundImage = '-webkit-gradient(linear, left top, right top, '
-            + 'color-stop(' + val + ', #1DB954), '
-            + 'color-stop(' + val + ', ' + color + ')'
-            + ')';
-    }
-
-    updateVolume(volumn, id) {
-        const input = document.getElementById(id);
-        const val = (input.value - input.getAttribute('min')) / (input.getAttribute('max') - input.getAttribute('min'));
-        this.moveSlider(id, volumn, '#212121');
-        this.setState({ volumn });
-        this.player.setVolume(val);
     }
 
     play({
@@ -205,6 +173,60 @@ class Player extends Component {
         });
     }
 
+    updateVolume(volume, id) {
+        this.moveSlider(id, volume, '#212121');
+        this.setState({ volume: Number(volume) });
+        this.setVolume({
+            volume,
+            playerInstance: this.player
+        });
+    }
+
+    playTimer(currPosition, uri) {
+        const player = this.props.players[uri];
+        if (currPosition >= (Math.floor(player['duration'] / 1000) * 1000) - 1000) {
+            clearInterval(player['playTimerInterval']);
+            this.moveSlider(`seeker-${uri}`, 0, '#C5C5C5');
+            this.setState({ position: 0 });
+            return;
+        }
+        const position = currPosition + 1000;
+        this.setState({ position });
+        this.moveSlider(`seeker-${uri}`, currPosition, '#C5C5C5');
+    }
+
+    handleSeekBar(event, id) {
+        const roundDown = (Math.floor(event.target.value / 1000) * 1000) - 5000;
+        const value = roundDown < 0 ? 0 : roundDown;
+        const uri = this.props.uri;
+        this.moveSlider(id, value, '#C5C5C5');
+        this.play({
+            spotify_uri: uri,
+            position: Math.floor(value),
+            playerInstance: this.player
+        });
+        this.setState({ position: Number(value) });
+    }
+
+    moveSlider(id, newVal, color, play = '') {
+        if (play === 'play') {
+            console.log(id, newVal);
+        }
+        const input = document.getElementById(id);
+        input.value = newVal;
+        const val = (input.value - input.getAttribute('min')) / (input.getAttribute('max') - input.getAttribute('min'));
+        input.style.backgroundImage = '-webkit-gradient(linear, left top, right top, '
+            + 'color-stop(' + val + ', #1DB954), '
+            + 'color-stop(' + val + ', ' + color + ')'
+            + ')';
+    }
+
+    millisToMinsAndSecs(ms) {
+        const minutes = Math.floor(ms / 60000);
+        const seconds = ((ms % 60000) / 1000).toFixed(0);
+        return `${minutes}:${(seconds < 10 ? '0' : '')}${seconds}`;
+    }
+
     checkForPlayer() {
         const { token } = this.props;
         if (window.Spotify) {
@@ -219,8 +241,6 @@ class Player extends Component {
             const playList = {};
             Object.keys(currPlayList).forEach((elem) => {
                 playList[elem] = {};
-                playList[elem]['init'] = true;
-                playList[elem]['player'] = this.player;
                 playList[elem]['playing'] = false;
                 playList[elem]['duration'] = currPlayList[elem]['duration'];
                 playList[elem]['playTimerInterval'] = null;
@@ -255,7 +275,7 @@ class Player extends Component {
         const uri = this.props.uri;
         const duration = players[uri] ? players[uri]['duration'] : 0;
         const seekerID = `seeker-${uri}`;
-        const volumnID = `volumn-${uri}`;
+        const volumnID = `volume-${uri}`;
         const status = (players[uri] && players[uri]['playing']) ? 'fa fa-pause-circle-o pauseBtn' : 'fa fa-play-circle-o playBtn';
         const startTime = this.millisToMinsAndSecs(this.state.position);
         const endTime = this.millisToMinsAndSecs(duration);
