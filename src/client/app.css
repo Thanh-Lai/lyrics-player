@@ -13,7 +13,6 @@ input, textarea, select {
     border-radius:10px;
     font-family: "Lucida Console", Courier, monospace;
     font-size: 12px;
-    border:0;
   }
 
 ::selection {
@@ -263,7 +262,7 @@ header li a:hover {
 #inputValue {
     padding: 0 10px 0 10px;
     margin: 0 5px 0 5px;
-    box-shadow:0 0 15px 4px #37d878;
+    border-width: 1px;
 }
 
 .songControls {
