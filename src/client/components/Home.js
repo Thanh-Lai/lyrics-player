@@ -62,8 +62,6 @@ class Home extends Component {
                     playList[elem.spotifyUri] = {};
                     playList[elem.spotifyUri]['ready'] = false;
                     playList[elem.spotifyUri]['duration'] = elem.duration;
-
-                    playList[elem.spotifyUri]['name'] = elem.title + ' ' + elem.artist;
                 }
             });
             this.props.updatePlayersOnFetch(playList);

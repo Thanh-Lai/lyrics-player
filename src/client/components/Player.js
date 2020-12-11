@@ -75,8 +75,6 @@ class Player extends Component {
                 playList[elem]['playTimerInterval'] = (elem === uri) ? currPlayList[elem]['playTimerInterval'] : null;
                 playList[elem]['position'] = (elem === uri) ? position : currPlayList[elem]['position'];
                 playList[elem]['ready'] = true;
-
-                playList[elem]['name'] = currPlayList[elem].name;
             });
             this.props.updatePlayer(playList);
         }

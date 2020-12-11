@@ -308,7 +308,7 @@ header li a:hover {
     position: relative;
     width: 70%;
     height: 10px;
-    background:linear-gradient(to right, #82CFD0 0%, #82CFD0 0%, #fff 0%, #fff 100%);;
+    background:linear-gradient(to right, #82CFD0 0%, #82CFD0 0%, #fff 0%, #fff 100%);
     outline: none;
     opacity: 0.7;
     -webkit-transition: .2s;
@@ -321,7 +321,7 @@ header li a:hover {
   
 input[type="range"]{
     -webkit-appearance: none !important;
-    -moz-apperance: none !important;;
+    -moz-apperance: none !important;
     border-radius: 6px;
     height: 6px;
 }
