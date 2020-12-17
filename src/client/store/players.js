@@ -5,7 +5,7 @@ const UPDATE_PLAYERS = 'UPDATE_PLAYERS';
 /**
  * INITIAL STATE
  */
-const initalPlayers = {};
+const initialPlayers = {};
 
 /**
  * ACTION CREATORS
@@ -15,7 +15,7 @@ export const updatePlayers = players => ({ type: UPDATE_PLAYERS, players });
 /**
  * REDUCER
  */
-export default function (state = initalPlayers, action) {
+export default function (state = initialPlayers, action) {
     switch (action.type) {
     case UPDATE_PLAYERS:
         return action.players;

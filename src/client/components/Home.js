@@ -3,7 +3,7 @@ import axios from 'axios';
 import { trackPromise } from 'react-promise-tracker';
 import { connect } from 'react-redux';
 import { SearchBox, AllSongs } from './index';
-import { updatePlayers } from '../store';
+import { updatePlayers, updateToken } from '../store';
 import '../app.css';
 import { API_KEY } from '../../../secrets';
 
@@ -14,7 +14,6 @@ class Home extends Component {
         super(props);
         this.state = {
             matchedResults: {},
-            token: '',
             clicked: false
         };
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -29,9 +28,7 @@ class Home extends Component {
         })
             .then((data) => {
                 if (this.isMounted) {
-                    this.setState({
-                        token: data.data
-                    });
+                    this.props.updateToken(data.data);
                 }
             });
     }
@@ -72,7 +69,7 @@ class Home extends Component {
         return (
             <div>
                 <SearchBox onSubmit={this.handleSubmit} />
-                <AllSongs token={this.state.token} clicked={this.state.clicked} matchedResults={this.state.matchedResults} />
+                <AllSongs clicked={this.state.clicked} matchedResults={this.state.matchedResults} />
             </div>
         );
     }
@@ -82,6 +79,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         updatePlayersOnFetch: (players) => {
             dispatch(updatePlayers(players));
+        },
+        updateToken: (token) => {
+            dispatch(updateToken(token));
         }
     };
 };

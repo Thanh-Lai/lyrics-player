@@ -1,9 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import Player from './Player';
 import NoPlayer from './NoPlayer';
 
-export default function Container({ songInfo, token }) {
+function Container({ songInfo, token }) {
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    const noToken = (token === 'No Token' || token === '');
     return (
         <div className="songContainer">
             <div className="songContent">
@@ -31,10 +33,18 @@ export default function Container({ songInfo, token }) {
                 <a value="songInfo.lyricsURL" href={songInfo.lyricsURL} target="_blank" rel="noreferrer">{songInfo.lyricsURL}</a>
             </div>
             <br />
-            {(isSafari || token === 'No Token' || !songInfo.spotifyUri)
+            {(isSafari || noToken || !songInfo.spotifyUri)
                 ? <NoPlayer isSafari={isSafari} token={token} />
                 : <Player logged={token} token={token} uri={songInfo.spotifyUri} />
             }
         </div>
     );
 }
+
+const mapStateToProps = (state) => {
+    return {
+        token: state.token
+    };
+};
+
+export default connect(mapStateToProps, null)(Container);
