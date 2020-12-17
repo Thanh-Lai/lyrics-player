@@ -2,7 +2,18 @@ body {
     text-align: center;
     margin: auto;
     background-color: #212121;
+    font-family: "Lucida Console", Courier, monospace;
 }
+
+input, textarea, select {
+    height : 35px;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    border-radius:10px;
+    font-family: "Lucida Console", Courier, monospace;
+    font-size: 12px;
+  }
 
 ::selection {
     background-color: #1DB954;
@@ -68,6 +79,23 @@ body {
     }
 }
 
+#searchBtn {
+    background-color: #1DB954;
+    height: 35px;
+    border-radius:10px;
+    border:0;
+    margin-left: 5px;
+
+}
+
+#searchBtn:hover {
+    background-color: #37d878;
+}
+
+.search {
+    height: 30px;
+}
+
 .gradientBorder:after {
     filter: blur(50px);
 }
@@ -84,17 +112,27 @@ body {
     border-top: none;
 }
 
+.tabLink {
+    font-family: "Lucida Console", Courier, monospace;
+    margin: 2px 0 2px 0;
+    padding: 3px 5px 3px 5px;
+}
+
+.tabLink:hover {
+    background-color: #37d878;
+}
+
 .active {
     background-color: #1DB954;
 }
 
 #noData {
-    margin-top: 100px;
+    margin-top: 55px;
     padding-bottom: 10px;
 }
 
 #containers{
-    margin-top: 100px;
+    margin-top: 55px;
 }
 
 .songContainer {
@@ -135,4 +173,213 @@ body {
     100% {
       transform: rotate(360deg);
     }
+}
+
+#navigation {
+    line-height: 50px;
+  }
+
+header {
+    background-color: black;
+    z-index: 1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 55px;
+}
+
+header * {
+    display: inline;
+}
+
+header li {
+    margin: 20px;
+}
+
+header li a {
+    margin-top:50px;
+    color: white;
+    text-decoration: none;
+}
+
+header li a:hover {
+    color: #37d878;
+}
+
+#loginBtn {
+    color: white;
+    background: none;
+    border: none;
+    outline:none;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: "Lucida Console", Courier, monospace;
+}
+
+#loginBtn:hover {
+    color: #37d878;
+}
+
+.marginTop{
+    color: white;
+    margin-top: 100px;
+}
+
+#profilePic {
+    vertical-align: middle;
+    padding-right: 5px;
+    border-radius: 50%;
+    width: 30px;
+    height: auto;
+}
+
+#user {
+    padding-right: 20px;
+    float: right;
+    color: white;
+    font-size: 10px;
+    font-family: "Lucida Console", Courier, monospace;
+}
+
+#instructionText {
+    overflow: auto;
+    text-align: left;
+    font-size: 15px;
+    height: 150px;
+}
+
+.breakSpace {
+    padding: 2px;
+}
+
+#textSearchForm {
+    position: absolute;
+    top: 40%;
+    width: 100%;
+}
+
+#inputValue {
+    padding: 0 10px 0 10px;
+    margin: 0 5px 0 5px;
+    border-width: 1px;
+}
+
+.songControls {
+    justify-content: center;
+    display: flex;
+    margin-top: 20px;
+  }
+
+.playBtn {
+    color: rgb(179, 179, 179);
+    cursor: pointer;
+}
+
+.playerContainer {
+    background-color: #505050;
+}
+.playerContainer .playBtn {
+    position: relative;
+    top: 1px;
+    font-size: 40px;
+    margin: 0 5px;
+}
+
+.playerContainer .pauseBtn {
+    position: relative;
+    top: 1px;
+    font-size: 40px;
+    margin: 0 5px;
+  }
+  
+.playBtn .fa {
+    -webkit-text-stroke: 4px #505050;
+}
+
+.noPlayer{
+    padding: 10px 0 10px 0;
+    color: #D3D3D3;
+}
+
+.seekBar {
+    -webkit-appearance: none !important;
+    top: 20px;
+    position: relative;
+    width: 70%;
+    height: 10px;
+    background:linear-gradient(to right, #82CFD0 0%, #82CFD0 0%, #fff 0%, #fff 100%);
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+  
+.seekBar:hover {
+    opacity: 1;
+}
+  
+input[type="range"]{
+    -webkit-appearance: none !important;
+    -moz-apperance: none !important;
+    border-radius: 6px;
+    height: 6px;
+}
+
+input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none !important;
+    background-color: #E9E9E9;
+    border: 1px solid #CECECE;
+    border-radius: 50%;
+    height: 15px;
+    width: 15px;
+    cursor: pointer;
+}
+
+.playTimes {
+    margin-top: 13px;
+    padding: 0 5px 0 5px;
+    color: #D3D3D3;
+}
+
+.volume {
+    -webkit-appearance: none;
+    border-radius: 6px;
+    position: relative;
+    transform: rotate(270deg);
+    background:black;
+    background:linear-gradient(to right, #82CFD0 0%, #82CFD0 0%, #212121 0%, #212121 100%);
+    outline: none;
+    opacity: 0;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    bottom: 92px;
+}
+
+.volume:hover {
+    opacity: 1;
+    background: #212121;
+    background-image: -webkit-gradient(
+        linear,
+        left top,
+        right top,
+        color-stop(50%, #1DB954),
+        color-stop(50%, #212121)
+    );
+}
+
+.fa-volume-up {
+    padding-top: 10px;
+}
+
+.fa-volume-up:hover + .volume {
+    opacity: 0.7;
+    background: #212121;
+    background-image: -webkit-gradient(
+        linear,
+        left top,
+        right top,
+        color-stop(50%, #1DB954),
+        color-stop(50%, #212121)
+    );
 }

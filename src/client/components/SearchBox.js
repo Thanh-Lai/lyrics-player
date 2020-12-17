@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import TextSearch from './TextSearch';
+import Instructions from './Instructions';
 
 export default class SearchBox extends Component {
     constructor(props) {
@@ -37,7 +38,7 @@ export default class SearchBox extends Component {
                     Coming Soon
                 </div>
                 <div id="instructions" className="tabContent">
-                    Instructions Here
+                    <Instructions />
                 </div>
             </div>
         );

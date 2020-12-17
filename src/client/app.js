@@ -1,43 +1,44 @@
 import React, { Component } from 'react';
+import { Route, Switch } from 'react-router-dom';
 import axios from 'axios';
-import { trackPromise } from 'react-promise-tracker';
-import { SearchBox, AllSongs } from './components';
-import './app.css';
 import { API_KEY } from '../../secrets';
+import {
+    Home, Contact, Navbar
+} from './components';
 
 export default class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            matchedResults: {},
-            clicked: false
+            login: {},
+            init: false
         };
-        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    async handleSubmit(event) {
-        const songOrLyric = document.getElementById('textType').value;
-        event.preventDefault();
-        const { value } = event.target.inputValue;
-        if (!value) return;
-        const uriEncodeInput = encodeURI(value);
-        const result = await trackPromise(axios.get(`http://localhost:23450/textSearch?query=${uriEncodeInput}&type=${songOrLyric}`, {
+    componentDidMount() {
+        axios.get('http://localhost:8888/auth/loginStatus', {
             headers: {
-                Authorization: API_KEY,
+                Authorization: API_KEY
             }
-        }));
-        this.setState({
-            matchedResults: result.data,
-            clicked: true
+        }).then((result) => {
+            this.setState({
+                login: result.data,
+                init: true
+            });
         });
     }
 
     render() {
+        if (!this.state.init) return (null);
         return (
-            <div>
-                <SearchBox onSubmit={this.handleSubmit} />
-                <AllSongs clicked={this.state.clicked} matchedResults={this.state.matchedResults} />
-            </div>
+            <main>
+                <Navbar loginInfo={this.state.login} />
+                <Switch>
+                    <Route path="/" exact component={Home} />
+                    <Route path="/contact" component={Contact} />
+                    <Route component={Home} />
+                </Switch>
+            </main>
         );
     }
 }

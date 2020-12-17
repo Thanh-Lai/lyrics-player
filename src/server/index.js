@@ -14,7 +14,6 @@ if (process.env.NODE_ENV !== 'production') {
 const createApp = () => {
     // logging middleware
     app.use(morgan('dev'));
-
     // body parsing middleware
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));

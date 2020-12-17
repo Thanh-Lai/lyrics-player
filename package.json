@@ -23,7 +23,13 @@
     "path": "^0.12.7",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
-    "react-promise-tracker": "^2.1.0"
+    "react-promise-tracker": "^2.1.0",
+    "react-redux": "^7.2.2",
+    "react-router-dom": "^5.2.0",
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.8",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

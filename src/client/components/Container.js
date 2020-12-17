@@ -1,6 +1,9 @@
 import React from 'react';
+import Player from './Player';
+import NoPlayer from './NoPlayer';
 
-export default function Container({ songInfo }) {
+export default function Container({ songInfo, token }) {
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     return (
         <div className="songContainer">
             <div className="songContent">
@@ -28,6 +31,10 @@ export default function Container({ songInfo }) {
                 <a value="songInfo.lyricsURL" href={songInfo.lyricsURL} target="_blank" rel="noreferrer">{songInfo.lyricsURL}</a>
             </div>
             <br />
+            {(isSafari || token === 'No Token' || !songInfo.spotifyUri)
+                ? <NoPlayer isSafari={isSafari} token={token} />
+                : <Player logged={token} token={token} uri={songInfo.spotifyUri} />
+            }
         </div>
     );
 }
