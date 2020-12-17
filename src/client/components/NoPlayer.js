@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default function NoPlayer({ token, isSafari }) {
-    let noPlayer = <div>No track found</div>;
+    let noPlayer = null;
 
     switch (true) {
     case isSafari:

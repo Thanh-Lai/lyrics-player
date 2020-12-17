@@ -25,9 +25,7 @@ class Player extends Component {
             this.pause({
                 playerInstance: this.player,
             });
-            this.movePlayer({
-                playerInstance: this.player,
-            });
+            this.movePlayer();
         }
         if (player) {
             clearInterval(player['playTimerInterval']);
@@ -55,7 +53,6 @@ class Player extends Component {
     }
 
     onStateChanged(state) {
-        // if we're no longer listening to music, we'll get a null state.
         if (state !== null) {
             const {
                 paused,
@@ -146,28 +143,9 @@ class Player extends Component {
         });
     }
 
-    movePlayer({
-        playerInstance: {
-            _options: {
-                getOAuthToken,
-                id
-            }
-        }
-    }) {
-        getOAuthToken((access_token) => {
-            fetch(';https://api.spotify.com/v1/me/player', {
-                method: 'PUT',
-                body: JSON.stringify(
-                    {
-                        device_ids: [id],
-                        play: true
-                    }
-                ),
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${access_token}`
-                },
-            });
+    movePlayer() {
+        fetch('', {
+            method: 'PUT'
         });
     }
 
@@ -206,10 +184,8 @@ class Player extends Component {
         this.setState({ position: Number(value) });
     }
 
-    moveSlider(id, newVal, color, play = '') {
-        if (play === 'play') {
-            console.log(id, newVal);
-        }
+    moveSlider(id, newVal, color) {
+        if (!newVal) return;
         const input = document.getElementById(id);
         input.value = newVal;
         const val = (input.value - input.getAttribute('min')) / (input.getAttribute('max') - input.getAttribute('min'));
@@ -244,8 +220,6 @@ class Player extends Component {
                 playList[elem]['playTimerInterval'] = null;
                 playList[elem]['position'] = 0;
                 playList[elem]['ready'] = true;
-
-                playList[elem]['name'] = currPlayList[elem].name;
             });
             this.player.connect().then(() => {
                 setTimeout(() => {
