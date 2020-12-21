@@ -43,6 +43,7 @@ class Home extends Component {
 
     componentWillUnmount() {
         this.isMounted = false;
+        clearInterval(this.refreshTimer);
     }
 
     checkRefreshTimer() {
