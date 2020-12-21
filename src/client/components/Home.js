@@ -54,11 +54,13 @@ class Home extends Component {
                 }
             })
                 .then((data) => {
-                    const tokenData = {
-                        token: data.data,
-                        timestamp: Date.now()
-                    };
-                    this.props.updateToken(tokenData);
+                    if (this.isMounted) {
+                        const tokenData = {
+                            token: data.data,
+                            timestamp: Date.now()
+                        };
+                        this.props.updateToken(tokenData);
+                    }
                 });
             this.setState({ timer: 0 });
         } else {
