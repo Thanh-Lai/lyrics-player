@@ -14,7 +14,6 @@ class Player extends Component {
     }
 
     componentDidMount() {
-        // If every sec if player is ready
         this.playerCheckInterval = setInterval(() => this.checkForPlayer(), 1000);
     }
 
@@ -202,7 +201,8 @@ class Player extends Component {
     }
 
     checkForPlayer() {
-        const { token } = this.props;
+        const { tokenInfo } = this.props;
+        const token = tokenInfo.token;
         if (window.Spotify) {
             clearInterval(this.playerCheckInterval);
             this.player = new window.Spotify.Player({
@@ -234,10 +234,7 @@ class Player extends Component {
         this.player.on('authentication_error', (e) => { console.error(e); });
         this.player.on('account_error', (e) => { console.error(e); });
         this.player.on('playback_error', (e) => { console.error(e); });
-
-        // Playback status updates
         this.player.on('player_state_changed', (state) => { this.onStateChanged(state); });
-        // Ready
         this.player.on('ready', () => { console.log('Device Spotify Lyrics Player is ready'); });
     }
 
@@ -300,7 +297,8 @@ class Player extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        players: state.players
+        players: state.players,
+        tokenInfo: state.token
     };
 };
 

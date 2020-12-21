@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { trackPromise } from 'react-promise-tracker';
 import { connect } from 'react-redux';
-import { SearchBox, AllSongs } from './index';
-import { updatePlayers } from '../store';
+import SearchBox from './SearchBox';
+import AllSongs from './AllSongs';
+import { updatePlayers, updateToken } from '../store';
 import '../app.css';
 import { API_KEY } from '../../../secrets';
 
@@ -14,14 +15,16 @@ class Home extends Component {
         super(props);
         this.state = {
             matchedResults: {},
-            token: '',
-            clicked: false
+            clicked: false,
+            timer: 0
         };
+        this.refreshTimer = null;
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentDidMount() {
         this.isMounted = true;
+        this.refreshTimer = setInterval(() => this.checkRefreshTimer(), 1000);
         axios.get('http://localhost:8888/auth/accessToken', {
             headers: {
                 Authorization: API_KEY
@@ -29,15 +32,38 @@ class Home extends Component {
         })
             .then((data) => {
                 if (this.isMounted) {
-                    this.setState({
-                        token: data.data
-                    });
+                    const tokenData = {
+                        token: data.data,
+                        timestamp: Date.now()
+                    };
+                    this.props.updateToken(tokenData);
                 }
             });
     }
 
     componentWillUnmount() {
         this.isMounted = false;
+        clearInterval(this.refreshTimer);
+    }
+
+    checkRefreshTimer() {
+        if (this.state.timer >= 3590) {
+            axios.get('http://localhost:8888/auth/refreshToken', {
+                headers: {
+                    Authorization: API_KEY
+                }
+            })
+                .then((data) => {
+                    const tokenData = {
+                        token: data.data,
+                        timestamp: Date.now()
+                    };
+                    this.props.updateToken(tokenData);
+                });
+            this.setState({ timer: 0 });
+        } else {
+            this.setState(prevState => ({ timer: prevState.timer + 1 }));
+        }
     }
 
     async handleSubmit(event) {
@@ -72,7 +98,7 @@ class Home extends Component {
         return (
             <div>
                 <SearchBox onSubmit={this.handleSubmit} />
-                <AllSongs token={this.state.token} clicked={this.state.clicked} matchedResults={this.state.matchedResults} />
+                <AllSongs clicked={this.state.clicked} matchedResults={this.state.matchedResults} />
             </div>
         );
     }
@@ -82,6 +108,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         updatePlayersOnFetch: (players) => {
             dispatch(updatePlayers(players));
+        },
+        updateToken: (token) => {
+            dispatch(updateToken(token));
         }
     };
 };
