@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import Player from './Player';
 import NoPlayer from './NoPlayer';
 
-function Container({ songInfo, token }) {
+function Container({ songInfo, tokenInfo }) {
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    const token = tokenInfo.token;
     const noToken = (token === 'No Token' || token === '');
     return (
         <div className="songContainer">
@@ -35,7 +36,7 @@ function Container({ songInfo, token }) {
             <br />
             {(isSafari || noToken || !songInfo.spotifyUri)
                 ? <NoPlayer isSafari={isSafari} token={token} />
-                : <Player logged={token} token={token} uri={songInfo.spotifyUri} />
+                : <Player uri={songInfo.spotifyUri} />
             }
         </div>
     );
@@ -43,7 +44,7 @@ function Container({ songInfo, token }) {
 
 const mapStateToProps = (state) => {
     return {
-        token: state.token
+        tokenInfo: state.token
     };
 };
 

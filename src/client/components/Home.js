@@ -14,13 +14,16 @@ class Home extends Component {
         super(props);
         this.state = {
             matchedResults: {},
-            clicked: false
+            clicked: false,
+            timer: 0
         };
+        this.refreshTimer = null;
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentDidMount() {
         this.isMounted = true;
+        this.refreshTimer = setInterval(() => this.checkRefreshTimer(), 1000);
         axios.get('http://localhost:8888/auth/accessToken', {
             headers: {
                 Authorization: API_KEY
@@ -28,13 +31,37 @@ class Home extends Component {
         })
             .then((data) => {
                 if (this.isMounted) {
-                    this.props.updateToken(data.data);
+                    const tokenData = {
+                        token: data.data,
+                        timestamp: Date.now()
+                    };
+                    this.props.updateToken(tokenData);
                 }
             });
     }
 
     componentWillUnmount() {
         this.isMounted = false;
+    }
+
+    checkRefreshTimer() {
+        if (this.state.timer >= 3590) {
+            axios.get('http://localhost:8888/auth/refreshToken', {
+                headers: {
+                    Authorization: API_KEY
+                }
+            })
+                .then((data) => {
+                    const tokenData = {
+                        token: data.data,
+                        timestamp: Date.now()
+                    };
+                    this.props.updateToken(tokenData);
+                });
+            this.setState({ timer: 0 });
+        } else {
+            this.setState(prevState => ({ timer: prevState.timer + 1 }));
+        }
     }
 
     async handleSubmit(event) {
