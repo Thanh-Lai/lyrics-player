@@ -450,6 +450,7 @@ input[type='range']::-webkit-slider-thumb {
 @media screen and (min-width: 500px) {
 /* Center the Modal! */
     .modal-area {
+        background-color: #D3D3D3;
         left: 50%;
         top: 50%;
         height: auto;
@@ -469,6 +470,11 @@ input[type='range']::-webkit-slider-thumb {
     border: 0;
     box-shadow: 0;
     cursor: pointer;
+    background-color: #1DB954;
+}
+
+._modal-close:hover {
+    background-color: #37d878;
 }
 
 ._modal-close-icon {
