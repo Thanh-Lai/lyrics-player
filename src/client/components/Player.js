@@ -1,20 +1,28 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { updatePlayers } from '../store';
+import Playlist from './Playlist';
+import { updatePlayers, updatePlaylists } from '../store';
 
 class Player extends Component {
     constructor(props) {
         super(props);
         this.state = {
             position: 0,
-            volume: 50
+            volume: 50,
+            showPlaylist: false,
+            currPlaylists: []
         };
         this.playerCheckInterval = null;
         this.handleSeekBar = this.handleSeekBar.bind(this);
+        this.handleOpenPlaylist = this.handleOpenPlaylist.bind(this);
+        this.handleClosePlaylist = this.handleClosePlaylist.bind(this);
+        this.handleEnterPlaylist = this.handleEnterPlaylist.bind(this);
+        this.handleLeavePlaylist = this.handleLeavePlaylist.bind(this);
     }
 
     componentDidMount() {
         this.playerCheckInterval = setInterval(() => this.checkForPlayer(), 1000);
+        this.getPlaylists();
     }
 
     componentWillUnmount() {
@@ -153,7 +161,8 @@ class Player extends Component {
         this.setState({ volume: Number(volume) });
         this.setVolume({
             volume,
-            playerInstance: this.player
+            playerInstance: this.player,
+            currPlayList: []
         });
     }
 
@@ -200,6 +209,57 @@ class Player extends Component {
         return `${minutes}:${(seconds < 10 ? '0' : '')}${seconds}`;
     }
 
+    handleOpenPlaylist(id, location = null) {
+        if (!location) {
+            this.getPlaylists();
+        }
+        document.getElementById(id).style.display = 'block';
+    }
+
+    handleClosePlaylist(id) {
+        setTimeout(() => {
+            if (!this.state.showPlaylist) {
+                document.getElementById(id).style.display = 'none';
+            }
+        }, 1000);
+    }
+
+    handleEnterPlaylist(id) {
+        this.setState({ showPlaylist: true });
+        this.handleOpenPlaylist(id, 'container');
+    }
+
+    handleLeavePlaylist(id) {
+        this.setState({ showPlaylist: false });
+        this.handleClosePlaylist(id, 'container');
+    }
+
+    getPlaylists() {
+        const { tokenInfo } = this.props;
+        const token = tokenInfo.token;
+        fetch(`https://api.spotify.com/v1/users/${this.props.profile.id}/playlists`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            }
+        }).then((res) => {
+            return res.json();
+        }).then((data) => {
+            const allPlaylists = Array.isArray(data.items) ? data.items : [];
+            const userPlaylists = [];
+            allPlaylists.forEach((playlist) => {
+                if (playlist.owner.id === this.props.profile.id) {
+                    userPlaylists.push(playlist);
+                }
+            });
+            this.props.updatePlaylists(userPlaylists);
+            this.setState({ currPlaylists: userPlaylists });
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
+
     checkForPlayer() {
         const { tokenInfo } = this.props;
         const token = tokenInfo.token;
@@ -224,7 +284,7 @@ class Player extends Component {
             this.player.connect().then(() => {
                 setTimeout(() => {
                     this.props.updatePlayer(playList);
-                }, 3000);
+                }, 1000);
             });
         }
     }
@@ -245,6 +305,7 @@ class Player extends Component {
         const duration = players[uri] ? players[uri]['duration'] : 0;
         const seekerID = `seeker-${uri}`;
         const volumnID = `volume-${uri}`;
+        const playlistID = `playlist-${uri}`;
         const status = (players[uri] && players[uri]['playing']) ? 'fa fa-pause-circle-o pauseBtn' : 'fa fa-play-circle-o playBtn';
         const startTime = this.millisToMinsAndSecs(this.state.position);
         const endTime = this.millisToMinsAndSecs(duration);
@@ -287,6 +348,26 @@ class Player extends Component {
                                     onInput={e => this.updateVolume(e.target.value, volumnID)}
                                 />
                             </div>
+                            <div
+                                role="button"
+                                onMouseEnter={() => { this.handleOpenPlaylist(playlistID); }}
+                                onMouseLeave={() => { this.handleClosePlaylist(playlistID); }}
+                            >
+                                <span
+                                    className="iconify"
+                                    data-icon="ic-baseline-playlist-add"
+                                    data-inline="false"
+                                />
+                            </div>
+                            <div
+                                onMouseEnter={() => { this.handleEnterPlaylist(playlistID); }}
+                                onMouseLeave={() => { this.handleLeavePlaylist(playlistID); }}
+                                className="showPlaylists"
+                                id={playlistID}
+                                style={{ display: 'none' }}
+                            >
+                                <Playlist uri={uri} playlists={this.state.currPlaylists} />
+                            </div>
                         </div>
                     </div>
                 )
@@ -298,7 +379,9 @@ class Player extends Component {
 const mapStateToProps = (state) => {
     return {
         players: state.players,
-        tokenInfo: state.token
+        tokenInfo: state.token,
+        profile: state.profileInfo,
+        playlists: state.playlists
     };
 };
 
@@ -306,6 +389,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         updatePlayer: (players) => {
             dispatch(updatePlayers(players));
+        },
+        updatePlaylists: (playlists) => {
+            dispatch(updatePlaylists(playlists));
         }
     };
 };

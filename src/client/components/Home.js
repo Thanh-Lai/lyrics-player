@@ -16,7 +16,6 @@ class Home extends Component {
         this.state = {
             matchedResults: {},
             clicked: false,
-            timer: 0
         };
         this.refreshTimer = null;
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -31,13 +30,14 @@ class Home extends Component {
             }
         })
             .then((data) => {
-                if (this.isMounted) {
-                    const tokenData = {
-                        token: data.data,
-                        timestamp: Date.now()
+                let tokenData = { token: data.data };
+                if (this.isMounted && data.data !== 'No Token') {
+                    tokenData = {
+                        token: data.data.access_token,
+                        timestamp: data.data.timestamp
                     };
-                    this.props.updateToken(tokenData);
                 }
+                this.props.updateToken(tokenData);
             });
     }
 
@@ -47,24 +47,19 @@ class Home extends Component {
     }
 
     checkRefreshTimer() {
-        if (this.state.timer >= 3590) {
-            axios.get('http://localhost:8888/auth/refreshToken', {
+        const { tokenInfo } = this.props;
+        const timePast = Math.floor((Date.now() - tokenInfo.timestamp) / 1000);
+        const expireTime = 3599;
+        if (tokenInfo.timestamp && timePast >= expireTime) {
+            axios.get('http://localhost:8888/auth/logout', {
                 headers: {
                     Authorization: API_KEY
                 }
-            })
-                .then((data) => {
-                    if (this.isMounted) {
-                        const tokenData = {
-                            token: data.data,
-                            timestamp: Date.now()
-                        };
-                        this.props.updateToken(tokenData);
-                    }
-                });
-            this.setState({ timer: 0 });
-        } else {
-            this.setState(prevState => ({ timer: prevState.timer + 1 }));
+            }).then((res) => {
+                window.location.href = res.data;
+            }).catch((err) => {
+                console.log(err);
+            });
         }
     }
 
@@ -106,6 +101,12 @@ class Home extends Component {
     }
 }
 
+const mapStateToProps = (state) => {
+    return {
+        tokenInfo: state.token
+    };
+};
+
 const mapDispatchToProps = (dispatch) => {
     return {
         updatePlayersOnFetch: (players) => {
@@ -117,4 +118,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(null, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

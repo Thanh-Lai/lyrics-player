@@ -26,7 +26,7 @@ function Container({ songInfo, tokenInfo }) {
                 {songInfo.releaseDate}
             </div>
             <div className="songContent">
-                <strong>Lyric Snippet:&nbsp;</strong>
+                <strong>Lyrics Snippet:&nbsp;</strong>
                 {songInfo.snippet}
             </div>
             <div className="songContent">

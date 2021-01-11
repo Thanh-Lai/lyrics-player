@@ -36,7 +36,6 @@ export default class Navbar extends Component {
     }
 
     render() {
-        const profile = this.props.loginInfo;
         const handleClick = { in: this.handleLogin, out: this.handleLogout };
         return (
             <header>
@@ -45,7 +44,7 @@ export default class Navbar extends Component {
                         <li><Link to="/">Home</Link></li>
                         <li><Link to="/contact">Contact</Link></li>
                         <li style={{ color: 'white' }}>&nbsp;|&nbsp;</li>
-                        <LoggingButton loginInfo={profile} handleClick={handleClick} />
+                        <LoggingButton handleClick={handleClick} />
                     </ul>
                 </nav>
             </header>
