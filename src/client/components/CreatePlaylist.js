@@ -4,7 +4,6 @@ import imageCompression from 'browser-image-compression';
 import defaultImage from '../../../public/default-image.png';
 import { updatePlaylists } from '../store';
 
-
 class CreatePlaylist extends Component {
     constructor(props) {
         super(props);

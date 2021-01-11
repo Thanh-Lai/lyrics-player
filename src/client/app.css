@@ -519,6 +519,13 @@ input[type='range']::-webkit-slider-thumb {
 
 .newPlaylistBtn {
     margin-top: 10px;
+    font-family: "Lucida Console", Courier, monospace;
+    background-color: #1DB954;
+    height: 25px;
+}
+
+.newPlaylistBtn:hover {
+    background-color: #37d878;
 }
 
 .formGroup {
@@ -538,6 +545,11 @@ input[type="file"] {
     display: inline-block;
     padding: 6px 12px;
     cursor: pointer;
+    background-color: #1DB954;
+}
+
+.custom-file-upload:hover {
+    background-color: #37d878 ;
 }
 
 .playlistImage {
