@@ -9,3 +9,4 @@ export { default as LoggingButton } from './LoggingButton';
 export { default as Instructions } from './Instructions';
 export { default as Player } from './Player';
 export { default as NoPlayer } from './NoPlayer';
+export { default as Playlist } from './Playlist';
