@@ -1,4 +1,5 @@
 import React from 'react';
+import '../style/searchBox.css';
 
 export default function Instructions() {
     return (

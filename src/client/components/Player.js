@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Playlist from './Playlist';
 import { updatePlayers, updatePlaylists } from '../store';
+import '../style/player.css';
 
 class Player extends Component {
     constructor(props) {

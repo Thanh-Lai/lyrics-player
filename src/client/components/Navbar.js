@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { API_KEY } from '../../../secrets';
 import LoggingButton from './LoggingButton';
+import '../style/navBar.css';
 
 export default class Navbar extends Component {
     constructor(props) {

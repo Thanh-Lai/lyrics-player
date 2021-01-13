@@ -1,0 +1,33 @@
+#navigation {
+    line-height: 50px;
+}
+
+#loginBtn {
+    color: white;
+    background: none;
+    border: none;
+    outline:none;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: "Lucida Console", Courier, monospace;
+}
+
+#loginBtn:hover {
+    color: #37d878;
+}
+
+#profilePic {
+    vertical-align: middle;
+    padding-right: 5px;
+    border-radius: 50%;
+    width: 30px;
+    height: auto;
+}
+
+#user {
+    padding-right: 20px;
+    float: right;
+    color: white;
+    font-size: 10px;
+    font-family: "Lucida Console", Courier, monospace;
+}

@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import FocusTrap from 'focus-trap-react';
 import CreatePlaylist from './CreatePlaylist';
+import '../style/playlist.css';
 
 export default function NewPlaylist({
     onClickOutside,

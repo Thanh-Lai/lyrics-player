@@ -1,6 +1,7 @@
 import React from 'react';
 import { usePromiseTracker } from 'react-promise-tracker';
 import Container from './Container';
+import '../style/songContainers.css';
 
 export default function AllSongs({ matchedResults, clicked }) {
     const { promiseInProgress } = usePromiseTracker();

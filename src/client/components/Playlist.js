@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import NewPlaylist from './NewPlaylist';
+import '../style/playlist.css';
 
 class Playlist extends Component {
     constructor(props) {

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import imageCompression from 'browser-image-compression';
 import defaultImage from '../../../public/default-image.png';
 import { updatePlaylists } from '../store';
+import '../style/playlist.css';
 
 class CreatePlaylist extends Component {
     constructor(props) {
@@ -95,7 +96,7 @@ class CreatePlaylist extends Component {
         const uploadID = `fileUpload-${this.props.uri}`;
         const { imagePreviewURL } = this.state;
         return (
-            <form className="newPlayListForm" onSubmit={e => this.handleSubmit(e)}>
+            <form onSubmit={e => this.handleSubmit(e)}>
                 <div style={{ marginBottom: '10px' }}>New Spotify Playlist</div>
                 <div className="formGroup">
                     <div className="uploadImage">
