@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import '../style/searchBox.css';
 
 export default class TextSearch extends Component {
     constructor(props) {
@@ -18,7 +19,7 @@ export default class TextSearch extends Component {
                     <option value="lyric">Lyrics</option>
                     <option value="song">Song Title</option>
                 </select>
-                <input placeholder="Search by lyrics or song title..." id="inputValue" type="textbox" style={{ width: '400px' }} />
+                <input placeholder="Search by lyrics or song title..." id="inputValue" type="textbox" />
                 <button id="searchBtn" type="submit"><i className="fa fa-search" /></button>
             </form>
         );

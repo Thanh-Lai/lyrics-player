@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import defaultProfile from '../../../public/default-profile.png';
+import '../style/navBar.css';
 
 function LogginButton({ profile, handleClick }) {
     if (Object.keys(profile).length) {

@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Player from './Player';
 import NoPlayer from './NoPlayer';
+import '../style/songContainers.css';
 
 function Container({ songInfo, tokenInfo }) {
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);

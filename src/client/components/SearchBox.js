@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import TextSearch from './TextSearch';
 import Instructions from './Instructions';
+import '../style/searchBox.css';
 
 export default class SearchBox extends Component {
     constructor(props) {

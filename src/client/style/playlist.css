@@ -1,0 +1,174 @@
+.iconify {
+    width: 25px;
+    height: 25px;
+    margin: 10px 10px 0 0;
+}
+
+.playlistsContainer {
+    background-color: #505050;
+    color: #D3D3D3;
+    opacity: 0.8;
+    position:absolute;
+    width: 150px;
+    height: auto;
+    left: 101%;
+    padding: 2px 0px 2px 0px;
+}
+
+.playlist {
+    text-align: left;
+    padding: 2px 5px;
+}
+
+.playlist:hover {
+    background-color:	#B8B8B8;
+    color:#505050;
+}
+
+/* Create Playlist */
+
+.modal-cover {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    transform: translateZ(0);
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.modal-area {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 2.5em 1.5em 1.5em 1.5em;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+@media screen and (min-width: 500px) {
+/* Center the Modal! */
+    .modal-area {
+        background-color: #D3D3D3;
+        left: 50%;
+        top: 50%;
+        height: auto;
+        transform: translate(-50%, -50%);
+        max-width: 35em;
+        max-height: calc(100% - 1em);
+    }
+}
+
+._modal-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0.5em;
+    line-height: 1;
+    background: #f6f6f7;
+    border: 0;
+    box-shadow: 0;
+    cursor: pointer;
+    background-color: #1DB954;
+}
+
+._modal-close:hover {
+    background-color: #37d878;
+}
+
+._modal-close-icon {
+    width: 25px;
+    height: 25px;
+    fill: transparent;
+    stroke: black;
+    stroke-linecap: round;
+    stroke-width: 2;
+}
+
+.modal-body {
+    padding-top: 0.25em;
+}
+
+._hide-visual {
+    border: 0 !important;
+    clip: rect(0 0 0 0) !important;
+    height: 1px !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    position: absolute !important;
+    width: 1px !important;
+    white-space: nowrap !important;
+}
+
+.scroll-lock {
+    overflow: hidden;
+    margin-right: 17px;
+}
+
+.description {
+    width: 300px;
+    height: 150px;
+    padding: 10px 5px;
+}
+
+.playListName {
+    margin-bottom: 10px;
+    width: 300px;
+}
+
+.formField {
+    display: inline-grid;
+    text-align: left;
+}
+
+.newPlaylistBtn {
+    margin-top: 10px;
+    font-family: "Lucida Console", Courier, monospace;
+    background-color: #1DB954;
+    height: 25px;
+    border: none;
+}
+
+.newPlaylistBtn:hover {
+    background-color: #37d878;
+}
+
+.formGroup {
+    display: flex;
+}
+
+.fileUpload {
+    margin-top: 10px;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    background-color: #1DB954;
+}
+
+.custom-file-upload:hover {
+    background-color: #37d878 ;
+}
+
+.playlistImage {
+    width: 170px;
+    height: 170px;
+    padding-top:10px;
+}
+
+.uploadImage{
+    padding: 25px 5px;
+}

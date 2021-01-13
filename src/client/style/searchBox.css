@@ -1,0 +1,103 @@
+#searchBtn {
+    background-color: #1DB954;
+    height: 35px;
+    border-radius:10px;
+    border:0;
+    margin-left: 5px;
+
+}
+
+#searchBtn:hover {
+    background-color: #37d878;
+}
+
+.search {
+    height: 30px;
+}
+
+#textSearchForm {
+    position: absolute;
+    top: 40%;
+    width: 100%;
+}
+
+#inputValue {
+    padding: 0 10px 0 10px;
+    margin: 0 5px 0 5px;
+    border-width: 1px;
+    width: 400px;
+}
+
+#box {
+    margin-top:100px;
+}
+
+#instructionText {
+    overflow: auto;
+    text-align: left;
+    font-size: 15px;
+    height: 150px;
+}
+
+.gradientBorder {
+    position: relative;
+    margin: auto;
+    width: 60vw;
+    height: 200px;
+    background: linear-gradient(0deg, white, #D3D3D3);
+  }
+.gradientBorder:before, .gradientBorder:after {
+    content: '';
+    position: absolute;
+    left: -2px;
+    top: -2px;
+    background: linear-gradient(45deg, #fb0094, #0000ff, #00ff00,#ffff00, #ff0000, #fb0094,
+        #0000ff, #00ff00,#ffff00, #ff0000);
+    background-size: 400%;
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    z-index: -1;
+    animation: steam 20s linear infinite;
+}
+
+@keyframes steam {
+    0% {
+        background-position: 0 0;
+    }
+    50% {
+        background-position: 400% 0;
+    }
+    100% {
+        background-position: 0 0;
+    }
+}
+
+.gradientBorder:after {
+    filter: blur(50px);
+}
+
+.tab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+.tabContent {
+    display: none;
+    padding: 10px 6px 0px 12px;
+    border-top: none;
+}
+
+.tabLink {
+    font-family: "Lucida Console", Courier, monospace;
+    margin: 2px 0 2px 0;
+    padding: 3px 5px 3px 5px;
+}
+
+.tabLink:hover {
+    background-color: #37d878;
+}
+
+.active {
+    background-color: #1DB954;
+}

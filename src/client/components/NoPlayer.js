@@ -1,4 +1,5 @@
 import React from 'react';
+import '../style/player.css';
 
 export default function NoPlayer({ token, isSafari }) {
     let noPlayer = null;
