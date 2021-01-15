@@ -13,6 +13,7 @@ input, textarea, select {
     border-radius:10px;
     font-family: "Lucida Console", Courier, monospace;
     font-size: 12px;
+    resize: vertical;
   }
 
 ::selection {
