@@ -5,7 +5,7 @@
     margin-right: auto;
     background: linear-gradient(0deg, white, #D3D3D3);
     width: 30%;
-    height: 600px;
+    height: 610px;
 }
 
 #contactForm {
@@ -66,4 +66,24 @@
 #hiddenContainer {
     height: 50px;
     top: -200px;
+}
+
+.fa-exclamation-circle {
+    padding-right: 5px;
+}
+
+.fa-check {
+    padding-right: 5px;
+}
+
+.hiddenErrMsg {
+    padding: 10px 5px;
+    background-color: black;
+    color: red;
+}
+
+.hiddenSucessMsg {
+    padding: 10px 5px;
+    background-color: black;
+    color: green;
 }

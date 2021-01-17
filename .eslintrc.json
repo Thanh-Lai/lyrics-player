@@ -35,6 +35,7 @@
       "jsx-a11y/label-has-associated-control": "off",
       "jsx-a11y/label-has-for": "off",
       "jsx-a11y/no-noninteractive-element-interactions": "off",
+      "no-useless-escape": "off",
       "react/jsx-filename-extension": [
           "error",
           {
@@ -42,6 +43,7 @@
           }
       ],
       "react/jsx-indent":[4.4],
-      "no-plusplus": [2, { "allowForLoopAfterthoughts": true }]
+      "no-plusplus": [2, { "allowForLoopAfterthoughts": true }],
+      "func-names": ["error", "never"]
     }
   }

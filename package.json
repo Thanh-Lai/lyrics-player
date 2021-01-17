@@ -21,6 +21,7 @@
     "compression": "^1.7.4",
     "express": "^4.16.3",
     "focus-trap-react": "^8.3.2",
+    "jquery": "^3.5.1",
     "morgan": "^1.10.0",
     "path": "^0.12.7",
     "react": "^16.5.2",

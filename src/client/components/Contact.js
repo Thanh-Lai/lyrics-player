@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import $ from 'jquery';
 import '../style/contact.css';
 import linkedIn from '../../../public/linkedin.png';
 import web from '../../../public/web.png';
@@ -23,14 +24,103 @@ export default class Contact extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        console.log('submit', this.state);
+        this.resetForm();
+        this.toggleDisableForm(true);
+        const {
+            name, subject, email, message
+        } = this.state;
+        const location = 'Lyrics Player';
+        const emailData = 'location=' + location + '&contactName=' + name + '&contactEmail=' + email
+        + '&contactSubject=' + subject + '&contactMessage=' + message;
+        if (this.validateForm()) {
+            return;
+        }
+        $.ajax({
+            type: 'POST',
+            url: 'https://script.google.com/macros/s/AKfycbwmoKJwas9QQVOIg27eF5Ufy-HjQsH9P1J1bIjFak8E7nN9x2k/exec',
+            data: emailData,
+            success: $.proxy((response) => {
+                if (response.result === 'success') {
+                    document.getElementById('contactForm').reset();
+                    this.toggleDisableForm(true);
+                    this.toggleMessage('#messageSuccess', true);
+                } else {
+                    this.toggleMessage('#messageWarning', true);
+                }
+            }, this),
+            error: $.proxy(() => {
+                this.toggleMessage('#messageWarning', true);
+            }, this),
+        });
+    }
+
+    validateForm() {
+        const {
+            name, email, message, honeypot
+        } = this.state;
+        if (honeypot.length > 0) {
+            this.toggleMessage('#messageHoneypot', true);
+            return true;
+        }
+        if (!name.length) {
+            this.toggleDisableForm(false);
+            this.toggleMessage('#messageIncomplete', true);
+            $('#name').css('border-color', 'red');
+            return true;
+        }
+        if (!message.length) {
+            this.toggleDisableForm(false);
+            this.toggleMessage('#messageIncomplete', true);
+            $('#message').css('border-color', 'red');
+            return true;
+        }
+        if (email.length && !this.validateEmail(email)) {
+            this.toggleDisableForm(false);
+            $('#email').css('border-color', 'red');
+            this.toggleMessage('#messageInvalidEmail', true);
+            return true;
+        }
+        return false;
+    }
+
+    validateEmail(email) {
+        const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
+    }
+
+    resetForm() {
+        const inputs = ['#name', '#email', '#message', '#subject'];
+        const errMsgs = ['#messageWarning', '#messageHoneypot', '#messageIncomplete', '#messageInvalidEmail'];
+        this.toggleDisableForm(false);
+        inputs.forEach((input) => {
+            $(input).css('border-color', 'black');
+        });
+        errMsgs.forEach((msg) => {
+            this.toggleMessage(msg, false);
+        });
+    }
+
+    toggleMessage(message, show) {
+        if (show) {
+            $(message).fadeIn();
+        } else {
+            $(message).fadeOut();
+        }
+    }
+
+    toggleDisableForm(disable) {
+        document.getElementById('contactBtn').disabled = disable;
+        const inputs = document.getElementsByClassName('contactInput');
+        for (let i = 0; i < inputs.length; i++) {
+            inputs[i].disabled = disable;
+        }
     }
 
     render() {
         return (
             <div id="contactContainer">
                 <form id="contactForm" onSubmit={e => this.handleSubmit(e)}>
-                    <strong>Message me</strong>
+                    <strong>Send a Message</strong>
                     <br />
                     <br />
                     <input
@@ -75,20 +165,28 @@ export default class Contact extends Component {
                     <input id="contactBtn" type="submit" value="Submit" />
                     <div id="hiddenContainer">
                         <img id="contactLoader" alt="" src="../../../public/loader.gif" hidden />
-                        <div id="messageWarning" hidden> There was an error, please try again.</div>
-                        <div id="messageHoneypot" hidden>
-                            <i className="fa fa-check" />
-                            Spamming detected.
+                        <div id="messageWarning" className="hiddenErrMsg" hidden>
+                            <i className="fa fa-exclamation-circle" />
+                            There was an error, please try again.
+                        </div>
+                        <div id="messageHoneypot" className="hiddenErrMsg" hidden>
+                            <i className="fa fa-exclamation-circle" />
+                            Spamming detected!
                             <br />
                         </div>
-                        <div id="messageIncomplete" hidden>
-                            <i className="fa fa-check" />
+                        <div id="messageIncomplete" className="hiddenErrMsg" hidden>
+                            <i className="fa fa-exclamation-circle" />
                             Please fill in all required fields marked with an asterisk.
                             <br />
                         </div>
-                        <div id="messageInvalidEmail" hidden>
-                            <i className="fa fa-check" />
+                        <div id="messageInvalidEmail" className="hiddenErrMsg" hidden>
+                            <i className="fa fa-exclamation-circle" />
                             Please provide a valid email address.
+                            <br />
+                        </div>
+                        <div id="messageSuccess" className="hiddenSucessMsg" hidden>
+                            <i className="fa fa-check" />
+                            Your message was sent, thank you!
                             <br />
                         </div>
                     </div>
