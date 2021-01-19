@@ -48,5 +48,24 @@
 }
 
 @media screen and (max-width: 800px) {
+    .songContent {
+        font-size: 12px;
+    }
+}
 
+@media screen and (max-width: 600px) {
+    .songContent {
+        font-size: 11px;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .songContent {
+        font-size: 11px;
+    }
+
+    a.lyricsUrl {
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+    }
 }

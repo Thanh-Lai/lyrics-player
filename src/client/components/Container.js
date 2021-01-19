@@ -32,7 +32,7 @@ function Container({ songInfo, tokenInfo }) {
             </div>
             <div className="songContent">
                 <strong>Lyrics:&nbsp;</strong>
-                <a value="songInfo.lyricsURL" href={songInfo.lyricsURL} target="_blank" rel="noreferrer">{songInfo.lyricsURL}</a>
+                <a className="lyricsUrl" value="songInfo.lyricsURL" href={songInfo.lyricsURL} target="_blank" rel="noreferrer">{songInfo.lyricsURL}</a>
             </div>
             <br />
             {(isSafari || noToken || !songInfo.spotifyUri)
