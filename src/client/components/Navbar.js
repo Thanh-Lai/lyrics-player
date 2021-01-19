@@ -42,10 +42,10 @@ export default class Navbar extends Component {
             <header>
                 <nav>
                     <ul id="navigation">
-                        <li><Link to="/">Home</Link></li>
-                        <li><Link to="/contact">Contact</Link></li>
-                        <li style={{ color: 'white' }}>&nbsp;|&nbsp;</li>
-                        <LoggingButton handleClick={handleClick} />
+                        <li className="navLinks"><Link to="/">Home</Link></li>
+                        <li className="navLinks"><Link to="/contact">Contact</Link></li>
+                        <li className="navLinks" id="breakBar" style={{ color: 'white' }}>&nbsp;|&nbsp;</li>
+                        <LoggingButton className="navLinks" handleClick={handleClick} />
                     </ul>
                 </nav>
             </header>

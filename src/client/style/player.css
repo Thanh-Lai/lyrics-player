@@ -12,7 +12,9 @@
 
 .playerContainer {
     background-color: #505050;
+    font-size: 2vw;
 }
+
 .playerContainer .playBtn {
     position: relative;
     top: 1px;
