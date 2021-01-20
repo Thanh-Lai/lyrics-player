@@ -50,6 +50,7 @@ class Player extends Component {
                 spotify_uri: uri,
                 position
             });
+            clearInterval(player['playTimerInterval']);
             player['playTimerInterval'] = setInterval(() => {
                 this.playTimer(this.state.position, uri);
             }, 1000);
