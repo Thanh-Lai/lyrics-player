@@ -166,7 +166,6 @@ input[type='range']::-webkit-slider-thumb {
 
     .seekBar {
         top: 7px;
-        background:linear-gradient(to right, #82CFD0 0%, #82CFD0 0%, #fff 0%, #fff 100%);
     }
 }
 
