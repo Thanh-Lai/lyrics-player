@@ -156,6 +156,10 @@ input[type='range']::-webkit-slider-thumb {
         height: 80px;
     }
 
+    .noPlayer.playerContainer  {
+        height: 20px;
+    }
+
     .playTimes {
         margin-top: 0px;
     }
@@ -173,5 +177,8 @@ input[type='range']::-webkit-slider-thumb {
 
     .playerContainer {
         height: 45px;
+    }
+    .noPlayer.playerContainer  {
+        font-size: 12px;
     }
 }
