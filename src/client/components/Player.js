@@ -170,10 +170,10 @@ class Player extends Component {
 
     playTimer(currPosition, uri) {
         const player = this.props.players[uri];
-        if (currPosition >= (Math.floor(player['duration'] / 1000) * 1000) - 1000) {
+        if (currPosition >= (Math.floor(player['duration'] / 1000) * 1000) - 2000) {
             clearInterval(player['playTimerInterval']);
-            this.moveSlider(`seeker-${uri}Block`, currPosition, '#C5C5C5');
-            this.moveSlider(`seeker-${uri}Inline`, currPosition, '#C5C5C5');
+            this.moveSlider(`seeker-${uri}Block`, 500, '#C5C5C5');
+            this.moveSlider(`seeker-${uri}Inline`, 500, '#C5C5C5');
             this.setState({ position: 0 });
             return;
         }
