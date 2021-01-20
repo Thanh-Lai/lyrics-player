@@ -41,14 +41,14 @@ class Player extends Component {
         }
     }
 
-    onPlayClick() {
+    onPlayClick(position) {
         const uri = this.props.uri;
         const player = this.props.players[uri];
         if (!player['playing']) {
             this.play({
                 playerInstance: this.player,
                 spotify_uri: uri,
-                position: player.position
+                position
             });
             player['playTimerInterval'] = setInterval(() => {
                 this.playTimer(this.state.position, uri);
@@ -185,19 +185,19 @@ class Player extends Component {
 
     handleSeekBar(event, id) {
         const roundDown = (Math.floor(event.target.value / 1000) * 1000) - 5000;
-        const value = roundDown < 0 ? 0 : roundDown;
+        const value = roundDown < 0 ? 0 : Math.floor(roundDown);
         const uri = this.props.uri;
         const player = this.props.players;
         const isPlaying = player[uri] && player[uri]['playing'];
         if (isPlaying) {
             this.play({
                 spotify_uri: uri,
-                position: Math.floor(value),
+                position: value,
                 playerInstance: this.player
             });
             this.moveSlider(id, value, '#C5C5C5');
         } else {
-            this.onPlayClick();
+            this.onPlayClick(value);
         }
         this.setState({ position: Number(value) });
     }
@@ -328,7 +328,7 @@ class Player extends Component {
                         <div className="songControls">
                             <div className="playBtn">
                                 <i
-                                    onClick={() => this.onPlayClick()}
+                                    onClick={() => this.onPlayClick(this.state.position)}
                                     className={'fa playBtn' + status}
                                     aria-hidden="true"
                                 />
