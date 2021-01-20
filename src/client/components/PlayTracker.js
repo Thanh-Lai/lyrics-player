@@ -16,7 +16,7 @@ export default function PlayTracker({
                 readOnly
                 min="0"
                 max={duration}
-                onInput={e => handleSeekBar(e, id)}
+                onMouseUp={e => handleSeekBar(e, id)}
             />
             <div className="playTimes">{endTime}</div>
         </div>
