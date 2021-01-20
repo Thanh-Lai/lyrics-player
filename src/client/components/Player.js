@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Playlist from './Playlist';
+import PlayTracker from './PlayTracker';
 import { updatePlayers, updatePlaylists } from '../store';
 import '../style/player.css';
 
@@ -40,15 +41,16 @@ class Player extends Component {
         }
     }
 
-    onPlayClick() {
+    onPlayClick(position) {
         const uri = this.props.uri;
         const player = this.props.players[uri];
         if (!player['playing']) {
             this.play({
                 playerInstance: this.player,
                 spotify_uri: uri,
-                position: player.position
+                position
             });
+            clearInterval(player['playTimerInterval']);
             player['playTimerInterval'] = setInterval(() => {
                 this.playTimer(this.state.position, uri);
             }, 1000);
@@ -169,27 +171,35 @@ class Player extends Component {
 
     playTimer(currPosition, uri) {
         const player = this.props.players[uri];
-        if (currPosition >= (Math.floor(player['duration'] / 1000) * 1000) - 1000) {
+        if (currPosition >= (Math.floor(player['duration'] / 1000) * 1000) - 2000) {
             clearInterval(player['playTimerInterval']);
-            this.moveSlider(`seeker-${uri}`, 0, '#C5C5C5');
+            this.moveSlider(`seeker-${uri}Block`, 500, '#C5C5C5');
+            this.moveSlider(`seeker-${uri}Inline`, 500, '#C5C5C5');
             this.setState({ position: 0 });
             return;
         }
         const position = currPosition + 1000;
         this.setState({ position });
-        this.moveSlider(`seeker-${uri}`, currPosition, '#C5C5C5');
+        this.moveSlider(`seeker-${uri}Block`, currPosition, '#C5C5C5');
+        this.moveSlider(`seeker-${uri}Inline`, currPosition, '#C5C5C5');
     }
 
     handleSeekBar(event, id) {
         const roundDown = (Math.floor(event.target.value / 1000) * 1000) - 5000;
-        const value = roundDown < 0 ? 0 : roundDown;
+        const value = roundDown < 0 ? 0 : Math.floor(roundDown);
         const uri = this.props.uri;
-        this.moveSlider(id, value, '#C5C5C5');
-        this.play({
-            spotify_uri: uri,
-            position: Math.floor(value),
-            playerInstance: this.player
-        });
+        const player = this.props.players;
+        const isPlaying = player[uri] && player[uri]['playing'];
+        if (isPlaying) {
+            this.play({
+                spotify_uri: uri,
+                position: value,
+                playerInstance: this.player
+            });
+            this.moveSlider(id, value, '#C5C5C5');
+        } else {
+            this.onPlayClick(value);
+        }
         this.setState({ position: Number(value) });
     }
 
@@ -307,7 +317,8 @@ class Player extends Component {
         const seekerID = `seeker-${uri}`;
         const volumnID = `volume-${uri}`;
         const playlistID = `playlist-${uri}`;
-        const status = (players[uri] && players[uri]['playing']) ? 'fa fa-pause-circle-o pauseBtn' : 'fa fa-play-circle-o playBtn';
+        const isPlaying = players[uri] && players[uri]['playing'];
+        const status = isPlaying ? 'fa fa-pause-circle-o pauseBtn' : 'fa fa-play-circle-o playBtn';
         const startTime = this.millisToMinsAndSecs(this.state.position);
         const endTime = this.millisToMinsAndSecs(duration);
         return (
@@ -318,24 +329,20 @@ class Player extends Component {
                         <div className="songControls">
                             <div className="playBtn">
                                 <i
-                                    onClick={() => this.onPlayClick()}
+                                    onClick={() => this.onPlayClick(this.state.position)}
                                     className={'fa playBtn' + status}
                                     aria-hidden="true"
                                 />
                             </div>
-                            <div id="startTime" className="playTimes">{startTime}</div>
-                            <input
-                                type="range"
-                                step="1"
-                                id={seekerID}
-                                className="seekBar"
-                                defaultValue="0"
-                                readOnly
-                                min="0"
-                                max={duration}
-                                onInput={e => this.handleSeekBar(e, seekerID)}
-                            />
-                            <div id="endTime" className="playTimes">{endTime}</div>
+                            <div className="trackerInline">
+                                <PlayTracker
+                                    startTime={startTime}
+                                    endTime={endTime}
+                                    id={seekerID + 'Inline'}
+                                    duration={duration}
+                                    handleSeekBar={this.handleSeekBar}
+                                />
+                            </div>
                             <div className="volumeContainer">
                                 <i className="fa fa-volume-up" aria-hidden="true" />
                                 <input
@@ -369,6 +376,15 @@ class Player extends Component {
                             >
                                 <Playlist uri={uri} playlists={this.state.currPlaylists} />
                             </div>
+                        </div>
+                        <div className="trackerBlock">
+                            <PlayTracker
+                                startTime={startTime}
+                                endTime={endTime}
+                                id={seekerID + 'Block'}
+                                duration={duration}
+                                handleSeekBar={this.handleSeekBar}
+                            />
                         </div>
                     </div>
                 )

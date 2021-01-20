@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
+import HiddenValidation from './HiddenValidation';
+import ContactLinks from './ContactLinks';
+import Paypal from './Paypal';
 import '../style/contact.css';
-import linkedIn from '../../../public/linkedin.png';
-import web from '../../../public/web.png';
 
 export default class Contact extends Component {
     constructor(props) {
@@ -163,33 +164,7 @@ export default class Contact extends Component {
                     />
                     <br />
                     <input id="contactBtn" type="submit" value="Submit" />
-                    <div id="hiddenContainer">
-                        <img id="contactLoader" alt="" src="../../../public/loader.gif" hidden />
-                        <div id="messageWarning" className="hiddenErrMsg" hidden>
-                            <i className="fa fa-exclamation-circle" />
-                            There was an error, please try again.
-                        </div>
-                        <div id="messageHoneypot" className="hiddenErrMsg" hidden>
-                            <i className="fa fa-exclamation-circle" />
-                            Spamming detected!
-                            <br />
-                        </div>
-                        <div id="messageIncomplete" className="hiddenErrMsg" hidden>
-                            <i className="fa fa-exclamation-circle" />
-                            Please fill in all required fields marked with an asterisk.
-                            <br />
-                        </div>
-                        <div id="messageInvalidEmail" className="hiddenErrMsg" hidden>
-                            <i className="fa fa-exclamation-circle" />
-                            Please provide a valid email address.
-                            <br />
-                        </div>
-                        <div id="messageSuccess" className="hiddenSucessMsg" hidden>
-                            <i className="fa fa-check" />
-                            Your message was sent, thank you!
-                            <br />
-                        </div>
-                    </div>
+
                     <div>
                         <input
                             autoComplete="off"
@@ -201,35 +176,12 @@ export default class Contact extends Component {
                             onKeyUp={e => this.handleChange(e)}
                         />
                     </div>
-
+                    <HiddenValidation />
                 </form>
                 <hr id="horizontal" />
                 <div style={{ marginTop: '20px' }}>
-                    <div id="contactLinks">
-                        <div className="contactInfo">
-                            <img className="contactImg" alt="linkedin" src={linkedIn} />
-                            &nbsp;
-                            <a href="https://www.linkedin.com/in/thanhlai/" rel="noreferrer" target="_blank">LinkedIn</a>
-                        </div>
-                        <div className="contactInfo">
-                            <img className="contactImg" alt="web" src={web} />
-                            &nbsp;
-                            <a href="https://www.thanh-lai.com/#home" rel="noreferrer" target="_blank">Website</a>
-                        </div>
-                    </div>
-                    <form action="https://www.paypal.com/donate" method="post" target="_blank">
-                        <input type="hidden" name="business" value="HU5A7M5FMKRHC" />
-                        <input type="hidden" name="currency_code" value="USD" />
-                        <input
-                            type="image"
-                            src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif"
-                            border="0"
-                            name="submit"
-                            title="PayPal - The safer, easier way to pay online!"
-                            alt="Donate with PayPal button"
-                        />
-                        <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
-                    </form>
+                    <ContactLinks />
+                    <Paypal />
                 </div>
             </div>
         );

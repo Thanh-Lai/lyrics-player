@@ -31,3 +31,31 @@
     font-size: 10px;
     font-family: "Lucida Console", Courier, monospace;
 }
+
+@media screen and (max-width: 550px) {
+    #user {
+        display: none;
+    }
+
+   .navLinks {
+        font-size: 12px;
+    }
+
+    #loginBtn {
+        font-size: 10px;
+    }
+
+    header {
+        height : 45px;
+    }
+}
+
+@media screen and (max-width: 375px) {
+    #navigation {
+        padding: 0px;
+    }
+
+    #breakBar {
+        margin: 0px;
+    }
+}
