@@ -51,19 +51,6 @@
     -webkit-overflow-scrolling: touch;
 }
 
-@media screen and (min-width: 500px) {
-/* Center the Modal! */
-    .modal-area {
-        background-color: #D3D3D3;
-        left: 50%;
-        top: 50%;
-        height: auto;
-        transform: translate(-50%, -50%);
-        max-width: 35em;
-        max-height: calc(100% - 1em);
-    }
-}
-
 ._modal-close {
     position: absolute;
     top: 0;
@@ -185,6 +172,33 @@ input[type="file"] {
         width: 120px;
         font-size: 11px;
     }
+
+    .formGroup {
+        display: block;
+    }
+
+    .uploadImage {
+        display: -moz-inline-grid;
+        display: -ms-inline-grid;
+        display: inline-grid;
+    }
+
+    ._modal-close {
+        position: inherit;
+    }
+}
+
+@media screen and (min-width: 550px) {
+    /* Center the Modal! */
+    .modal-area {
+        background-color: #D3D3D3;
+        left: 50%;
+        top: 50%;
+        height: auto;
+        transform: translate(-50%, -50%);
+        max-width: 30em;
+        max-height: calc(100% - 1em);
+    }
 }
 
 @media screen and (max-width: 500px) {
@@ -198,5 +212,21 @@ input[type="file"] {
     .playlistsContainer {
         width: 115px;
         left: 85%;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .playListName, .description {
+        width: 250px;
+    }
+}
+
+@media screen and (max-height: 400px) {
+    .modal-area {
+        height: 300px;
+    }
+
+    .newPlaylistBtn {
+        margin: 0;
     }
 }
