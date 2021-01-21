@@ -6,6 +6,8 @@ import LoggingButton from './LoggingButton';
 import '../style/navBar.css';
 
 export default class Navbar extends Component {
+    ENV = process.env.NODE_ENV === 'development' ? 'http://localhost:8888' : 'https://api.lyricsplayer.tk';
+
     constructor(props) {
         super(props);
         this.handleLogin = this.handleLogin.bind(this);
@@ -13,7 +15,7 @@ export default class Navbar extends Component {
     }
 
     handleLogin() {
-        axios.get('http://localhost:8888/auth/login', {
+        axios.get(this.ENV + '/auth/login', {
             headers: {
                 Authorization: API_KEY
             }
@@ -25,7 +27,7 @@ export default class Navbar extends Component {
     }
 
     handleLogout() {
-        axios.get('http://localhost:8888/auth/logout', {
+        axios.get(this.ENV + '/auth/logout', {
             headers: {
                 Authorization: API_KEY
             }

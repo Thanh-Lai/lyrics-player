@@ -11,6 +11,8 @@ import { API_KEY } from '../../../secrets';
 class Home extends Component {
     isMounted = false;
 
+    ENV = process.env.NODE_ENV === 'development' ? 'http://localhost:8888' : 'https://api.lyricsplayer.tk';
+
     constructor(props) {
         super(props);
         this.state = {
@@ -24,7 +26,7 @@ class Home extends Component {
     componentDidMount() {
         this.isMounted = true;
         this.refreshTimer = setInterval(() => this.checkRefreshTimer(), 1000);
-        axios.get('http://localhost:8888/auth/accessToken', {
+        axios.get(this.ENV + '/auth/accessToken', {
             headers: {
                 Authorization: API_KEY
             }
@@ -51,7 +53,7 @@ class Home extends Component {
         const timePast = Math.floor((Date.now() - tokenInfo.timestamp) / 1000);
         const expireTime = 3599;
         if (tokenInfo.timestamp && timePast >= expireTime) {
-            axios.get('http://localhost:8888/auth/logout', {
+            axios.get(this.ENV + '/auth/logout', {
                 headers: {
                     Authorization: API_KEY
                 }
@@ -69,7 +71,7 @@ class Home extends Component {
         const { value } = event.target.inputValue;
         if (!value) return;
         const uriEncodeInput = encodeURI(value);
-        const result = await trackPromise(axios.get(`http://localhost:8888/textSearch?query=${uriEncodeInput}&type=${songOrLyric}`, {
+        const result = await trackPromise(axios.get(`${this.ENV}/textSearch?query=${uriEncodeInput}&type=${songOrLyric}`, {
             headers: {
                 Authorization: API_KEY,
             }
