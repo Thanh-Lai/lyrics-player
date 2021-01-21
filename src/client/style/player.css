@@ -169,13 +169,39 @@ input[type='range']::-webkit-slider-thumb {
     }
 }
 
-@media screen and (max-width: 450px) {
-    .trackerBlock {
-        display: none;
+@media screen and (max-width: 900px) {
+    .gradientBorder {
+        width: 70vw;
     }
 
-    .playerContainer {
-        height: 45px;
+    .songContainer {
+        width: 60vw !important;
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .gradientBorder {
+        width: 80vw;
+    }
+
+    .songContainer {
+        width: 70vw !important;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .gradientBorder {
+        width: 100vw;
+    }
+
+    .songContainer {
+        width: 85vw !important;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .songContainer {
+        width: 100vw !important;
     }
 
     .noPlayer.playerContainer  {
