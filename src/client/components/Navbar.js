@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { API_KEY } from '../../../secrets';
+import { API_KEY, ENV } from '../../../secrets';
 import LoggingButton from './LoggingButton';
 import '../style/navBar.css';
 
 export default class Navbar extends Component {
-    ENV = process.env.NODE_ENV === 'development' ? 'http://localhost:8888' : 'http://api.lyricsplayer.tk';
-
     constructor(props) {
         super(props);
         this.handleLogin = this.handleLogin.bind(this);
@@ -15,7 +13,7 @@ export default class Navbar extends Component {
     }
 
     handleLogin() {
-        axios.get(this.ENV + '/auth/login', {
+        axios.get(ENV + '/auth/login', {
             headers: {
                 Authorization: API_KEY
             }
@@ -27,7 +25,7 @@ export default class Navbar extends Component {
     }
 
     handleLogout() {
-        axios.get(this.ENV + '/auth/logout', {
+        axios.get(ENV + '/auth/logout', {
             headers: {
                 Authorization: API_KEY
             }

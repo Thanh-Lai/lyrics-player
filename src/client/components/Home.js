@@ -6,12 +6,10 @@ import SearchBox from './SearchBox';
 import AllSongs from './AllSongs';
 import { updatePlayers, updateToken } from '../store';
 import '../app.css';
-import { API_KEY } from '../../../secrets';
+import { API_KEY, ENV } from '../../../secrets';
 
 class Home extends Component {
     isMounted = false;
-
-    ENV = process.env.NODE_ENV === 'development' ? 'http://localhost:8888' : 'http://api.lyricsplayer.tk';
 
     constructor(props) {
         super(props);
@@ -26,7 +24,7 @@ class Home extends Component {
     componentDidMount() {
         this.isMounted = true;
         this.refreshTimer = setInterval(() => this.checkRefreshTimer(), 1000);
-        axios.get(this.ENV + '/auth/accessToken', {
+        axios.get(ENV + '/auth/accessToken', {
             headers: {
                 Authorization: API_KEY
             }
@@ -53,7 +51,7 @@ class Home extends Component {
         const timePast = Math.floor((Date.now() - tokenInfo.timestamp) / 1000);
         const expireTime = 3599;
         if (tokenInfo.timestamp && timePast >= expireTime) {
-            axios.get(this.ENV + '/auth/logout', {
+            axios.get(ENV + '/auth/logout', {
                 headers: {
                     Authorization: API_KEY
                 }
@@ -71,7 +69,7 @@ class Home extends Component {
         const { value } = event.target.inputValue;
         if (!value) return;
         const uriEncodeInput = encodeURI(value);
-        const result = await trackPromise(axios.get(`${this.ENV}/textSearch?query=${uriEncodeInput}&type=${songOrLyric}`, {
+        const result = await trackPromise(axios.get(`${ENV}/textSearch?query=${uriEncodeInput}&type=${songOrLyric}`, {
             headers: {
                 Authorization: API_KEY,
             }

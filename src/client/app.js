@@ -3,14 +3,12 @@ import { Route, Switch } from 'react-router-dom';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { updateProfileInfo } from './store';
-import { API_KEY } from '../../secrets';
+import { API_KEY, ENV } from '../../secrets';
 import Home from './components/Home';
 import Contact from './components/Contact';
 import Navbar from './components/Navbar';
 
 class App extends Component {
-    ENV = process.env.NODE_ENV === 'development' ? 'http://localhost:8888' : 'http://api.lyricsplayer.tk';
-
     constructor(props) {
         super(props);
         this.state = {
@@ -19,7 +17,7 @@ class App extends Component {
     }
 
     componentDidMount() {
-        axios.get(this.ENV + '/auth/loginStatus', {
+        axios.get(ENV + '/auth/loginStatus', {
             headers: {
                 Authorization: API_KEY
             }
