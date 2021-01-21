@@ -4,9 +4,9 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import { updateProfileInfo } from './store';
 import { API_KEY } from '../../secrets';
-import {
-    Home, Contact, Navbar
-} from './components';
+import Home from './components/Home';
+import Contact from './components/Contact';
+import Navbar from './components/Navbar';
 
 class App extends Component {
     constructor(props) {
