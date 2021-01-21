@@ -6,7 +6,7 @@ import LoggingButton from './LoggingButton';
 import '../style/navBar.css';
 
 export default class Navbar extends Component {
-    ENV = process.env.NODE_ENV === 'development' ? 'http://localhost:8888' : 'https://api.lyricsplayer.tk';
+    ENV = process.env.NODE_ENV === 'development' ? 'http://localhost:8888' : 'http://api.lyricsplayer.tk';
 
     constructor(props) {
         super(props);

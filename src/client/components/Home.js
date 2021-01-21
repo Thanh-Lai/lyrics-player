@@ -11,7 +11,7 @@ import { API_KEY } from '../../../secrets';
 class Home extends Component {
     isMounted = false;
 
-    ENV = process.env.NODE_ENV === 'development' ? 'http://localhost:8888' : 'https://api.lyricsplayer.tk';
+    ENV = process.env.NODE_ENV === 'development' ? 'http://localhost:8888' : 'http://api.lyricsplayer.tk';
 
     constructor(props) {
         super(props);

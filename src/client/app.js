@@ -9,6 +9,8 @@ import Contact from './components/Contact';
 import Navbar from './components/Navbar';
 
 class App extends Component {
+    ENV = process.env.NODE_ENV === 'development' ? 'http://localhost:8888' : 'http://api.lyricsplayer.tk';
+
     constructor(props) {
         super(props);
         this.state = {
@@ -17,7 +19,7 @@ class App extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:8888/auth/loginStatus', {
+        axios.get(this.ENV + '/auth/loginStatus', {
             headers: {
                 Authorization: API_KEY
             }
