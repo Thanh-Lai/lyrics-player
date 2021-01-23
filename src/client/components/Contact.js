@@ -33,14 +33,18 @@ export default class Contact extends Component {
         const location = 'Lyrics Player';
         const emailData = 'location=' + location + '&contactName=' + name + '&contactEmail=' + email
         + '&contactSubject=' + subject + '&contactMessage=' + message;
-        if (this.validateForm()) {
+
+        const error = this.validateForm();
+        if (error) {
             return;
         }
+        this.toggleLoader(true);
         $.ajax({
             type: 'POST',
             url: 'https://script.google.com/macros/s/AKfycbwmoKJwas9QQVOIg27eF5Ufy-HjQsH9P1J1bIjFak8E7nN9x2k/exec',
             data: emailData,
             success: $.proxy((response) => {
+                this.toggleLoader(false);
                 if (response.result === 'success') {
                     document.getElementById('contactForm').reset();
                     this.toggleDisableForm(true);
@@ -50,6 +54,7 @@ export default class Contact extends Component {
                 }
             }, this),
             error: $.proxy(() => {
+                this.toggleLoader(false);
                 this.toggleMessage('#messageWarning', true);
             }, this),
         });
@@ -106,6 +111,14 @@ export default class Contact extends Component {
             $(message).fadeIn();
         } else {
             $(message).fadeOut();
+        }
+    }
+
+    toggleLoader(show) {
+        if (show) {
+            $('#contactLoader').fadeIn();
+        } else {
+            $('#contactLoader').fadeOut();
         }
     }
 
