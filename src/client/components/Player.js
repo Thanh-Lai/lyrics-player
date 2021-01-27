@@ -12,7 +12,8 @@ class Player extends Component {
             position: 0,
             volume: 50,
             showPlaylist: false,
-            currPlaylists: []
+            currPlaylists: [],
+            hasError: false
         };
         this.playerCheckInterval = null;
         this.handleSeekBar = this.handleSeekBar.bind(this);
@@ -42,6 +43,7 @@ class Player extends Component {
     }
 
     onPlayClick(position) {
+        if (this.state.hasError) return;
         const uri = this.props.uri;
         const player = this.props.players[uri];
         if (!player['playing']) {
@@ -185,6 +187,7 @@ class Player extends Component {
     }
 
     handleSeekBar(event, id) {
+        if (this.state.hasError) return;
         const roundDown = (Math.floor(event.target.value / 1000) * 1000) - 5000;
         const value = roundDown < 0 ? 0 : Math.floor(roundDown);
         const uri = this.props.uri;
@@ -301,10 +304,22 @@ class Player extends Component {
     }
 
     createEventHandlers() {
-        this.player.on('initialization_error', (e) => { console.error(e); });
-        this.player.on('authentication_error', (e) => { console.error(e); });
-        this.player.on('account_error', (e) => { console.error(e); });
-        this.player.on('playback_error', (e) => { console.error(e); });
+        this.player.on('initialization_error', (e) => {
+            this.setState({ hasError: true });
+            console.error(e);
+        });
+        this.player.on('authentication_error', (e) => {
+            this.setState({ hasError: true });
+            console.error(e);
+        });
+        this.player.on('account_error', (e) => {
+            this.setState({ hasError: true });
+            console.error(e);
+        });
+        this.player.on('playback_error', (e) => {
+            this.setState({ hasError: true });
+            console.error(e);
+        });
         this.player.on('player_state_changed', (state) => { this.onStateChanged(state); });
         this.player.on('ready', () => { console.log('Device Spotify Lyrics Player is ready'); });
     }
