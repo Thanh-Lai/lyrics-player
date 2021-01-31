@@ -277,6 +277,8 @@ class Player extends Component {
     checkForPlayer() {
         const { tokenInfo } = this.props;
         const token = tokenInfo.token;
+        const playList = this.playlistInformation();
+        this.updateIframeCSS();
         if (window.Spotify) {
             clearInterval(this.playerCheckInterval);
             this.player = new window.Spotify.Player({
@@ -285,22 +287,37 @@ class Player extends Component {
                 volume: 0.5
             });
             this.createEventHandlers();
-            const currPlayList = { ...this.props.players };
-            const playList = {};
-            Object.keys(currPlayList).forEach((elem) => {
-                playList[elem] = {};
-                playList[elem]['playing'] = false;
-                playList[elem]['duration'] = currPlayList[elem]['duration'];
-                playList[elem]['playTimerInterval'] = null;
-                playList[elem]['position'] = 0;
-                playList[elem]['ready'] = true;
-            });
             this.player.connect().then(() => {
                 setTimeout(() => {
                     this.props.updatePlayer(playList);
                 }, 1000);
             });
         }
+    }
+
+    updateIframeCSS() {
+        const iframe = document.querySelector('iframe[src="https://sdk.scdn.co/embedded/index.html"]');
+        if (iframe) {
+            iframe.removeAttribute('style');
+            iframe.style.display = 'block';
+            iframe.style.position = 'absolute';
+            iframe.style.top = '-1000px';
+            iframe.style.left = '-1000px';
+        }
+    }
+
+    playlistInformation() {
+        const currPlayList = { ...this.props.players };
+        const playList = {};
+        Object.keys(currPlayList).forEach((elem) => {
+            playList[elem] = {};
+            playList[elem]['playing'] = false;
+            playList[elem]['duration'] = currPlayList[elem]['duration'];
+            playList[elem]['playTimerInterval'] = null;
+            playList[elem]['position'] = 0;
+            playList[elem]['ready'] = true;
+        });
+        return playList;
     }
 
     createEventHandlers() {
