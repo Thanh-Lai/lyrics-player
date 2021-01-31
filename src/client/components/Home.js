@@ -28,17 +28,18 @@ class Home extends Component {
             headers: {
                 Authorization: API_KEY
             }
-        })
-            .then((data) => {
-                let tokenData = { token: data.data };
-                if (this.isMounted && data.data !== 'No Token') {
-                    tokenData = {
-                        token: data.data.access_token,
-                        timestamp: data.data.timestamp
-                    };
-                }
-                this.props.updateToken(tokenData);
-            });
+        }).then((data) => {
+            let tokenData = { token: data.data };
+            if (this.isMounted && data.data !== 'No Token') {
+                tokenData = {
+                    token: data.data.access_token,
+                    timestamp: data.data.timestamp
+                };
+            }
+            this.props.updateToken(tokenData);
+        }).catch((err) => {
+            console.log(err);
+        });
     }
 
     componentWillUnmount() {

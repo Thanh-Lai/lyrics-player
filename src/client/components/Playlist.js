@@ -46,6 +46,8 @@ class Playlist extends Component {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${this.props.tokenInfo.token}`
             },
+        }).catch((err) => {
+            console.log(err);
         });
     }
 

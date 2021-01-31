@@ -105,6 +105,8 @@ class Player extends Component {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${access_token}`
                 },
+            }).catch((err) => {
+                console.log(err);
             });
         });
     }
@@ -132,6 +134,8 @@ class Player extends Component {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${access_token}`
                 },
+            }).catch((err) => {
+                console.log(err);
             });
         });
     }
@@ -151,6 +155,8 @@ class Player extends Component {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${access_token}`
                 },
+            }).catch((err) => {
+                console.log(err);
             });
         });
     }
@@ -158,6 +164,8 @@ class Player extends Component {
     movePlayer() {
         fetch('', {
             method: 'PUT'
+        }).catch((err) => {
+            console.log(err);
         });
     }
 

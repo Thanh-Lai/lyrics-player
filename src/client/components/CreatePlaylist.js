@@ -75,6 +75,8 @@ class CreatePlaylist extends Component {
             this.props.updatePlaylists(currPlaylists);
             this.props.addSongToPlaylist(data.id);
             this.props.closeModal();
+        }).catch((err) => {
+            console.log(err);
         });
     }
 
