@@ -1,5 +1,5 @@
 import React from 'react';
-import loader from '../../../public/loader.gif';
+import loader from '../../../public/images/loader.gif';
 import '../style/contact.css';
 
 export default function HiddenValidation() {

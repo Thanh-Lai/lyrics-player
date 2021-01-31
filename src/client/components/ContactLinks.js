@@ -1,7 +1,7 @@
 import React from 'react';
 import '../style/contact.css';
-import linkedIn from '../../../public/linkedin.png';
-import web from '../../../public/web.png';
+import linkedIn from '../../../public/images/linkedin.png';
+import web from '../../../public/images/web.png';
 
 export default function ContactLinks() {
     return (

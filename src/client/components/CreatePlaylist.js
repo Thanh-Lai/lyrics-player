@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import imageCompression from 'browser-image-compression';
-import defaultImage from '../../../public/default-image.png';
+import defaultImage from '../../../public/images/default-image.png';
 import { updatePlaylists } from '../store';
 import '../style/playlist.css';
 
