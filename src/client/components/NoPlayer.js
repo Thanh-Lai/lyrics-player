@@ -3,7 +3,6 @@ import '../style/player.css';
 
 export default function NoPlayer({ token, isSafari }) {
     let noPlayer = null;
-
     switch (true) {
     case isSafari:
         noPlayer = <div>Safari not supported</div>;

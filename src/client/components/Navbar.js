@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import platform from 'platform';
 import { API_KEY, ENV } from '../../../secrets';
 import LoggingButton from './LoggingButton';
 import '../style/navBar.css';
@@ -30,6 +31,7 @@ export default class Navbar extends Component {
                 Authorization: API_KEY
             }
         }).then((res) => {
+            localStorage.removeItem(`Spotify_${platform.name}`);
             window.location.href = res.data;
         }).catch((err) => {
             console.log(err);

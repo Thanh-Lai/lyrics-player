@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { trackPromise } from 'react-promise-tracker';
 import { connect } from 'react-redux';
+import platform from 'platform';
 import SearchBox from './SearchBox';
 import AllSongs from './AllSongs';
-import { updatePlayers, updateToken } from '../store';
+import { updatePlayers } from '../store';
 import '../app.css';
 import { API_KEY, ENV } from '../../../secrets';
 
@@ -24,22 +25,6 @@ class Home extends Component {
     componentDidMount() {
         this.isMounted = true;
         this.refreshTimer = setInterval(() => this.checkRefreshTimer(), 1000);
-        axios.get(ENV + '/auth/accessToken', {
-            headers: {
-                Authorization: API_KEY
-            }
-        }).then((data) => {
-            let tokenData = { token: data.data };
-            if (this.isMounted && data.data !== 'No Token') {
-                tokenData = {
-                    token: data.data.access_token,
-                    timestamp: data.data.timestamp
-                };
-            }
-            this.props.updateToken(tokenData);
-        }).catch((err) => {
-            console.log(err);
-        });
     }
 
     componentWillUnmount() {
@@ -48,7 +33,9 @@ class Home extends Component {
     }
 
     checkRefreshTimer() {
-        const { tokenInfo } = this.props;
+        const key = `Spotify_${platform.name}`;
+        const tokenInfo = (JSON.parse(localStorage.getItem(key)) && JSON.parse(localStorage.getItem(key)).tokenInfo)
+            ? JSON.parse(localStorage.getItem(key)).tokenInfo : '';
         const timePast = Math.floor((Date.now() - tokenInfo.timestamp) / 1000);
         const expireTime = 3599;
         if (tokenInfo.timestamp && timePast >= expireTime) {
@@ -57,6 +44,7 @@ class Home extends Component {
                     Authorization: API_KEY
                 }
             }).then((res) => {
+                localStorage.removeItem(`Spotify_${platform.name}`);
                 window.location.href = res.data;
             }).catch((err) => {
                 console.log(err);
@@ -112,9 +100,6 @@ const mapDispatchToProps = (dispatch) => {
     return {
         updatePlayersOnFetch: (players) => {
             dispatch(updatePlayers(players));
-        },
-        updateToken: (token) => {
-            dispatch(updateToken(token));
         }
     };
 };

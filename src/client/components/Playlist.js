@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import platform from 'platform';
 import NewPlaylist from './NewPlaylist';
 import '../style/playlist.css';
 
-class Playlist extends Component {
+export default class Playlist extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -35,6 +35,9 @@ class Playlist extends Component {
     }
 
     handleAddToPlaylist(playlist = '') {
+        const key = `Spotify_${platform.name}`;
+        const tokenInfo = (JSON.parse(localStorage.getItem(key)) && JSON.parse(localStorage.getItem(key)).tokenInfo)
+            ? JSON.parse(localStorage.getItem(key)).tokenInfo : '';
         fetch(`https://api.spotify.com/v1/playlists/${playlist}/tracks?`, {
             method: 'POST',
             body: JSON.stringify(
@@ -44,7 +47,7 @@ class Playlist extends Component {
             ),
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${this.props.tokenInfo.token}`
+                Authorization: `Bearer ${tokenInfo.token}`
             },
         }).catch((err) => {
             console.log(err);
@@ -87,11 +90,3 @@ class Playlist extends Component {
         );
     }
 }
-
-const mapStateToProps = (state) => {
-    return {
-        tokenInfo: state.token
-    };
-};
-
-export default connect(mapStateToProps, null)(Playlist);
