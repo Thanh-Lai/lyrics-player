@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import imageCompression from 'browser-image-compression';
+import platform from 'platform';
 import defaultImage from '../../../public/images/default-image.png';
 import { updatePlaylists } from '../store';
 import '../style/playlist.css';
@@ -12,11 +13,22 @@ class CreatePlaylist extends Component {
             image: '',
             imagePreviewURL: '',
             name: '',
-            description: ''
+            description: '',
+            profileId: null,
+            token: ''
         };
         this.handleImageChange = this.handleImageChange.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    componentDidMount() {
+        const key = `Spotify_${platform.name}`;
+        const storage = localStorage.getItem(key) ? JSON.parse(localStorage.getItem(key)) : {};
+        this.setState({
+            profileId: storage.profileInfo.id,
+            token: storage.tokenInfo.token
+        });
     }
 
     async handleImageChange(event) {
@@ -49,10 +61,14 @@ class CreatePlaylist extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        const { name, description, image } = this.state;
-        const token = this.props.tokenInfo.token;
-        const userID = this.props.profile.id;
-        fetch(`https://api.spotify.com/v1/users/${userID}/playlists`, {
+        const {
+            name,
+            description,
+            image,
+            token,
+            profileId
+        } = this.state;
+        fetch(`https://api.spotify.com/v1/users/${profileId}/playlists`, {
             method: 'POST',
             body: JSON.stringify(
                 {
@@ -68,7 +84,7 @@ class CreatePlaylist extends Component {
             return res.json();
         }).then((data) => {
             if (image) {
-                this.setPlaylistImage(userID, data.id, image, token);
+                this.setPlaylistImage(profileId, data.id, image, token);
             }
             const currPlaylists = this.props.playlists;
             currPlaylists.unshift(data);
@@ -150,8 +166,6 @@ class CreatePlaylist extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        profile: state.profileInfo,
-        tokenInfo: state.token,
         playlists: state.playlists,
     };
 };

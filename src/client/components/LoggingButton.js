@@ -1,9 +1,11 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import platform from 'platform';
 import defaultProfile from '../../../public/images/default-profile.png';
 import '../style/navBar.css';
 
-function LogginButton({ profile, handleClick }) {
+export default function LogginButton({ handleClick }) {
+    const storage = JSON.parse(localStorage.getItem(`Spotify_${platform.name}`));
+    const profile = storage ? storage.profileInfo : {};
     if (Object.keys(profile).length) {
         return (
             <li>
@@ -19,11 +21,3 @@ function LogginButton({ profile, handleClick }) {
         <li><button type="button" id="loginBtn" onClick={handleClick.in}>Log In</button></li>
     );
 }
-
-const mapStateToProps = (state) => {
-    return {
-        profile: state.profileInfo
-    };
-};
-
-export default connect(mapStateToProps, null)(LogginButton);

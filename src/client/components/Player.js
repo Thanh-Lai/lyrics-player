@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import platform from 'platform';
 import Playlist from './Playlist';
 import PlayTracker from './PlayTracker';
 import { updatePlayers, updatePlaylists } from '../store';
@@ -13,7 +14,10 @@ class Player extends Component {
             volume: 50,
             showPlaylist: false,
             currPlaylists: [],
-            hasError: false
+            hasError: false,
+            token: '',
+            profileId: null
+
         };
         this.playerCheckInterval = null;
         this.handleSeekBar = this.handleSeekBar.bind(this);
@@ -24,6 +28,13 @@ class Player extends Component {
     }
 
     componentDidMount() {
+        const key = `Spotify_${platform.name}`;
+        const storage = JSON.parse(localStorage.getItem(key))
+            ? JSON.parse(localStorage.getItem(key)) : {};
+        this.setState({
+            token: storage.tokenInfo.token,
+            profileId: storage.profileInfo.id
+        });
         this.playerCheckInterval = setInterval(() => this.checkForPlayer(), 1000);
         this.getPlaylists();
     }
@@ -257,9 +268,8 @@ class Player extends Component {
     }
 
     getPlaylists() {
-        const { tokenInfo } = this.props;
-        const token = tokenInfo.token;
-        fetch(`https://api.spotify.com/v1/users/${this.props.profile.id}/playlists`, {
+        const { token, profileId } = this.state;
+        fetch(`https://api.spotify.com/v1/users/${profileId}/playlists`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -271,7 +281,7 @@ class Player extends Component {
             const allPlaylists = Array.isArray(data.items) ? data.items : [];
             const userPlaylists = [];
             allPlaylists.forEach((playlist) => {
-                if (playlist.owner.id === this.props.profile.id) {
+                if (playlist.owner.id === profileId) {
                     userPlaylists.push(playlist);
                 }
             });
@@ -283,8 +293,7 @@ class Player extends Component {
     }
 
     checkForPlayer() {
-        const { tokenInfo } = this.props;
-        const token = tokenInfo.token;
+        const { token } = this.state;
         const playList = this.playlistInformation();
         this.updateIframeCSS();
         if (window.Spotify) {
@@ -436,8 +445,6 @@ class Player extends Component {
 const mapStateToProps = (state) => {
     return {
         players: state.players,
-        tokenInfo: state.token,
-        profile: state.profileInfo,
         playlists: state.playlists
     };
 };

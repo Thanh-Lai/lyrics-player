@@ -1,34 +1,53 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import axios from 'axios';
-import { connect } from 'react-redux';
-import { updateProfileInfo } from './store';
+import platform from 'platform';
 import { API_KEY, ENV } from '../../secrets';
 import Home from './components/Home';
 import Contact from './components/Contact';
 import Navbar from './components/Navbar';
 
-class App extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            init: false
-        };
-    }
-
+export default class App extends Component {
     componentDidMount() {
-        axios.get(ENV + '/auth/loginStatus', {
+        const key = `Spotify_${platform.name}`;
+        if (localStorage.getItem(key) && localStorage.getItem(key)['tokenInfo']) return;
+        axios.get(ENV + '/auth/accessToken', {
             headers: {
                 Authorization: API_KEY
             }
-        }).then((result) => {
-            this.props.updateProfileInfo(result.data);
-            this.setState({ init: true });
+        }).then((data) => {
+            let tokenData = { token: data.data };
+            if (data.data !== 'No Token') {
+                tokenData = {
+                    token: data.data.access_token,
+                    timestamp: data.data.timestamp
+                };
+            }
+            const storeInfo = {
+                tokenInfo: tokenData
+            };
+            if (data.data.access_token) {
+                axios.get(ENV + '/auth/loginStatus', {
+                    headers: {
+                        Authorization: API_KEY
+                    },
+                    params: {
+                        token: data.data.access_token
+                    }
+                }).then((result) => {
+                    storeInfo['profileInfo'] = result.data;
+                    localStorage.setItem(key, JSON.stringify(storeInfo));
+                    location.reload();
+                }).catch((err) => {
+                    console.log(err);
+                });
+            }
+        }).catch((err) => {
+            console.log(err);
         });
     }
 
     render() {
-        if (!this.state.init) return (null);
         return (
             <main>
                 <Navbar />
@@ -41,13 +60,3 @@ class App extends Component {
         );
     }
 }
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        updateProfileInfo: (players) => {
-            dispatch(updateProfileInfo(players));
-        }
-    };
-};
-
-export default connect(null, mapDispatchToProps)(App);

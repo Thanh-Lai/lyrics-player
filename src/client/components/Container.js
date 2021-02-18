@@ -1,13 +1,15 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import platform from 'platform';
 import Player from './Player';
 import NoPlayer from './NoPlayer';
 import '../style/songContainers.css';
 
-function Container({ songInfo, tokenInfo }) {
+export default function Container({ songInfo }) {
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-    const token = tokenInfo.token;
-    const noToken = (token === 'No Token' || token === '');
+    const key = `Spotify_${platform.name}`;
+    const token = (JSON.parse(localStorage.getItem(key)) && JSON.parse(localStorage.getItem(key)).tokenInfo)
+        ? JSON.parse(localStorage.getItem(key)).tokenInfo : 'No Token';
+    const noToken = (token === 'No Token');
     return (
         <div className="songContainer">
             <div className="songContent">
@@ -42,11 +44,3 @@ function Container({ songInfo, tokenInfo }) {
         </div>
     );
 }
-
-const mapStateToProps = (state) => {
-    return {
-        tokenInfo: state.token
-    };
-};
-
-export default connect(mapStateToProps, null)(Container);
