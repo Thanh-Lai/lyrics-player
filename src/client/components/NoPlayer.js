@@ -11,7 +11,7 @@ export default function NoPlayer({ token, isSafari, product }) {
         noPlayer = <div>Log in to play song</div>;
         break;
     case product === 'open':
-        noPlayer = <div>You must have a Spotify premium account</div>;
+        noPlayer = <div>A Spotify premium account is required</div>;
         break;
     default:
         noPlayer = <div>No track found</div>;
