@@ -7,8 +7,10 @@ import '../style/songContainers.css';
 export default function Container({ songInfo }) {
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     const key = `Spotify_${platform.name}`;
-    const token = (JSON.parse(localStorage.getItem(key)) && JSON.parse(localStorage.getItem(key)).tokenInfo)
-        ? JSON.parse(localStorage.getItem(key)).tokenInfo : 'No Token';
+    const storage = JSON.parse(localStorage.getItem(key));
+    const profile = storage ? storage.profileInfo : {};
+    const token = (storage && storage.tokenInfo)
+        ? storage.tokenInfo : 'No Token';
     const noToken = (token === 'No Token');
     return (
         <div className="songContainer">
@@ -37,8 +39,8 @@ export default function Container({ songInfo }) {
                 <a className="lyricsUrl" value="songInfo.lyricsURL" href={songInfo.lyricsURL} target="_blank" rel="noreferrer">{songInfo.lyricsURL}</a>
             </div>
             <br />
-            {(isSafari || noToken || !songInfo.spotifyUri)
-                ? <NoPlayer isSafari={isSafari} token={token} />
+            {(isSafari || noToken || !songInfo.spotifyUri || profile.product === 'open')
+                ? <NoPlayer isSafari={isSafari} token={token} product={profile.product} />
                 : <Player uri={songInfo.spotifyUri} />
             }
         </div>
