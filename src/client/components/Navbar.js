@@ -13,19 +13,23 @@ export default class Navbar extends Component {
         this.handleLogout = this.handleLogout.bind(this);
     }
 
-    handleLogin() {
+    handleLogin(e) {
+        e.preventDefault();
         axios.get(ENV + '/auth/login', {
             headers: {
                 Authorization: API_KEY
             }
         }).then((res) => {
             window.location.href = res.data;
+        }).then(() => {
+            console.log('hit');
         }).catch((err) => {
             console.log(err);
         });
     }
 
-    handleLogout() {
+    handleLogout(e) {
+        e.preventDefault();
         axios.get(ENV + '/auth/logout', {
             headers: {
                 Authorization: API_KEY
