@@ -14,12 +14,10 @@ class Player extends Component {
             volume: 50,
             showPlaylist: false,
             currPlaylists: [],
-            hasError: false,
             token: '',
             profileId: null
 
         };
-        this.playerCheckInterval = null;
         this.handleSeekBar = this.handleSeekBar.bind(this);
         this.handleOpenPlaylist = this.handleOpenPlaylist.bind(this);
         this.handleClosePlaylist = this.handleClosePlaylist.bind(this);
@@ -28,49 +26,46 @@ class Player extends Component {
     }
 
     componentDidMount() {
+        const currSongs = this.getCurrSongs();
+        this.props.updatePlayer(currSongs);
         const key = `Spotify_${platform.name}`;
         const storage = JSON.parse(localStorage.getItem(key))
             ? JSON.parse(localStorage.getItem(key)) : {};
+
         this.setState({
-            token: storage.tokenInfo.token,
-            profileId: storage.profileInfo.id
+            profileId: storage.profileInfo.id,
         });
-        this.playerCheckInterval = setInterval(() => this.checkForPlayer(), 1000);
         this.getPlaylists();
+        this.props.spotifyPlayer.on('player_state_changed', (state) => { this.onStateChanged(state); });
     }
 
     componentWillUnmount() {
-        const uri = this.props.uri;
-        const player = this.props.players[uri];
-        if (this.player) {
+        if (this.props.spotifyPlayer) {
             this.pause({
-                playerInstance: this.player,
+                playerInstance: this.props.spotifyPlayer,
             });
             this.movePlayer();
-        }
-        if (player) {
-            clearInterval(player['playTimerInterval']);
         }
     }
 
     onPlayClick(position) {
-        if (this.state.hasError) return;
         const uri = this.props.uri;
-        const player = this.props.players[uri];
-        if (!player['playing']) {
+        const song = this.props.players[uri];
+        const player = this.props.spotifyPlayer;
+        if (!song['playing']) {
             this.play({
-                playerInstance: this.player,
+                playerInstance: player,
                 spotify_uri: uri,
                 position
             });
-            clearInterval(player['playTimerInterval']);
-            player['playTimerInterval'] = setInterval(() => {
+            clearInterval(song['playTimerInterval']);
+            song['playTimerInterval'] = setInterval(() => {
                 this.playTimer(this.state.position, uri);
             }, 1000);
             this.updateVolume(this.state.volume, `volume-${uri}`);
         } else {
             this.pause({
-                playerInstance: this.player,
+                playerInstance: player,
             });
         }
     }
@@ -105,12 +100,11 @@ class Player extends Component {
         playerInstance: {
             _options: {
                 getOAuthToken,
-                id
             }
         }
     }) {
         getOAuthToken((access_token) => {
-            fetch(`https://api.spotify.com/v1/me/player/volume?volume_percent=${volume}&device_id=${id}`, {
+            fetch(`https://api.spotify.com/v1/me/player/volume?volume_percent=${volume}&device_id=${this.props.deviceID}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -128,12 +122,11 @@ class Player extends Component {
         playerInstance: {
             _options: {
                 getOAuthToken,
-                id
             }
         }
     }) {
         getOAuthToken((access_token) => {
-            fetch(`https://api.spotify.com/v1/me/player/play?device_id=${id}`, {
+            fetch(`https://api.spotify.com/v1/me/player/play?device_id=${this.props.deviceID}`, {
                 method: 'PUT',
                 body: JSON.stringify(
                     {
@@ -155,12 +148,11 @@ class Player extends Component {
         playerInstance: {
             _options: {
                 getOAuthToken,
-                id
             }
         }
     }) {
         getOAuthToken((access_token) => {
-            fetch(`https://api.spotify.com/v1/me/player/pause?device_id=${id}`, {
+            fetch(`https://api.spotify.com/v1/me/player/pause?device_id=${this.props.deviceID}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -185,7 +177,7 @@ class Player extends Component {
         this.setState({ volume: Number(volume) });
         this.setVolume({
             volume,
-            playerInstance: this.player,
+            playerInstance: this.props.spotifyPlayer,
             currPlayList: []
         });
     }
@@ -206,7 +198,6 @@ class Player extends Component {
     }
 
     handleSeekBar(event, id) {
-        if (this.state.hasError) return;
         const roundDown = (Math.floor(event.target.value / 1000) * 1000) - 5000;
         const value = roundDown < 0 ? 0 : Math.floor(roundDown);
         const uri = this.props.uri;
@@ -216,7 +207,7 @@ class Player extends Component {
             this.play({
                 spotify_uri: uri,
                 position: value,
-                playerInstance: this.player
+                playerInstance: this.props.spotifyPlayer
             });
             this.moveSlider(id, value, '#C5C5C5');
         } else {
@@ -292,70 +283,18 @@ class Player extends Component {
         });
     }
 
-    checkForPlayer() {
-        const { token } = this.state;
-        const playList = this.playlistInformation();
-        this.updateIframeCSS();
-        if (window.Spotify) {
-            clearInterval(this.playerCheckInterval);
-            this.player = new window.Spotify.Player({
-                name: 'Spotify Lyrics Player',
-                getOAuthToken: (cb) => { cb(token); },
-                volume: 0.5
-            });
-            this.createEventHandlers();
-            this.player.connect().then(() => {
-                setTimeout(() => {
-                    this.props.updatePlayer(playList);
-                }, 1000);
-            });
-        }
-    }
-
-    updateIframeCSS() {
-        const iframe = document.querySelector('iframe[src="https://sdk.scdn.co/embedded/index.html"]');
-        if (iframe) {
-            iframe.removeAttribute('style');
-            iframe.style.display = 'block';
-            iframe.style.position = 'absolute';
-            iframe.style.top = '-1000px';
-            iframe.style.left = '-1000px';
-        }
-    }
-
-    playlistInformation() {
-        const currPlayList = { ...this.props.players };
-        const playList = {};
-        Object.keys(currPlayList).forEach((elem) => {
-            playList[elem] = {};
-            playList[elem]['playing'] = false;
-            playList[elem]['duration'] = currPlayList[elem]['duration'];
-            playList[elem]['playTimerInterval'] = null;
-            playList[elem]['position'] = 0;
-            playList[elem]['ready'] = true;
+    getCurrSongs() {
+        const currSongs = { ...this.props.players };
+        const songList = {};
+        Object.keys(currSongs).forEach((elem) => {
+            songList[elem] = {};
+            songList[elem]['playing'] = false;
+            songList[elem]['duration'] = currSongs[elem]['duration'];
+            songList[elem]['playTimerInterval'] = null;
+            songList[elem]['position'] = 0;
+            songList[elem]['ready'] = true;
         });
-        return playList;
-    }
-
-    createEventHandlers() {
-        this.player.on('initialization_error', (e) => {
-            this.setState({ hasError: true });
-            console.error(e);
-        });
-        this.player.on('authentication_error', (e) => {
-            this.setState({ hasError: true });
-            console.error(e);
-        });
-        this.player.on('account_error', (e) => {
-            this.setState({ hasError: true });
-            console.error(e);
-        });
-        this.player.on('playback_error', (e) => {
-            this.setState({ hasError: true });
-            console.error(e);
-        });
-        this.player.on('player_state_changed', (state) => { this.onStateChanged(state); });
-        this.player.on('ready', () => { console.log('Device Spotify Lyrics Player is ready'); });
+        return songList;
     }
 
     render() {
@@ -371,73 +310,68 @@ class Player extends Component {
         const startTime = this.millisToMinsAndSecs(this.state.position);
         const endTime = this.millisToMinsAndSecs(duration);
         return (
-            ((players[uri] && !players[uri]['ready'])
-                ? <div className="playerContainer noPlayer">Loading...</div>
-                : (
-                    <div className="playerContainer">
-                        <div className="songControls">
-                            <div className="playBtn">
-                                <i
-                                    onClick={() => this.onPlayClick(this.state.position)}
-                                    className={'fa playBtn' + status}
-                                    aria-hidden="true"
-                                />
-                            </div>
-                            <div className="trackerInline">
-                                <PlayTracker
-                                    startTime={startTime}
-                                    endTime={endTime}
-                                    id={seekerID + 'Inline'}
-                                    duration={duration}
-                                    handleSeekBar={this.handleSeekBar}
-                                />
-                            </div>
-                            <div className="volumeContainer">
-                                <i className="fa fa-volume-up" aria-hidden="true" />
-                                <input
-                                    type="range"
-                                    step="1"
-                                    id={volumnID}
-                                    className="volume"
-                                    min="0"
-                                    max="100"
-                                    defaultValue="50"
-                                    onInput={e => this.updateVolume(e.target.value, volumnID)}
-                                />
-                            </div>
-                            <div
-                                role="button"
-                                onMouseEnter={() => { this.handleOpenPlaylist(playlistID); }}
-                                onMouseLeave={() => { this.handleClosePlaylist(playlistID); }}
-                            >
-                                <span
-                                    className="iconify"
-                                    data-icon="ic-baseline-playlist-add"
-                                    data-inline="false"
-                                />
-                            </div>
-                            <div
-                                onMouseEnter={() => { this.handleEnterPlaylist(playlistID); }}
-                                onMouseLeave={() => { this.handleLeavePlaylist(playlistID); }}
-                                className="showPlaylists"
-                                id={playlistID}
-                                style={{ display: 'none' }}
-                            >
-                                <Playlist uri={uri} playlists={this.state.currPlaylists} />
-                            </div>
-                        </div>
-                        <div className="trackerBlock">
-                            <PlayTracker
-                                startTime={startTime}
-                                endTime={endTime}
-                                id={seekerID + 'Block'}
-                                duration={duration}
-                                handleSeekBar={this.handleSeekBar}
-                            />
-                        </div>
+            <div className="playerContainer">
+                <div className="songControls">
+                    <div className="playBtn">
+                        <i
+                            onClick={() => this.onPlayClick(this.state.position)}
+                            className={'fa playBtn' + status}
+                            aria-hidden="true"
+                        />
                     </div>
-                )
-            )
+                    <div className="trackerInline">
+                        <PlayTracker
+                            startTime={startTime}
+                            endTime={endTime}
+                            id={seekerID + 'Inline'}
+                            duration={duration}
+                            handleSeekBar={this.handleSeekBar}
+                        />
+                    </div>
+                    <div className="volumeContainer">
+                        <i className="fa fa-volume-up" aria-hidden="true" />
+                        <input
+                            type="range"
+                            step="1"
+                            id={volumnID}
+                            className="volume"
+                            min="0"
+                            max="100"
+                            defaultValue="50"
+                            onInput={e => this.updateVolume(e.target.value, volumnID)}
+                        />
+                    </div>
+                    <div
+                        role="button"
+                        onMouseEnter={() => { this.handleOpenPlaylist(playlistID); }}
+                        onMouseLeave={() => { this.handleClosePlaylist(playlistID); }}
+                    >
+                        <span
+                            className="iconify"
+                            data-icon="ic-baseline-playlist-add"
+                            data-inline="false"
+                        />
+                    </div>
+                    <div
+                        onMouseEnter={() => { this.handleEnterPlaylist(playlistID); }}
+                        onMouseLeave={() => { this.handleLeavePlaylist(playlistID); }}
+                        className="showPlaylists"
+                        id={playlistID}
+                        style={{ display: 'none' }}
+                    >
+                        <Playlist uri={uri} playlists={this.state.currPlaylists} />
+                    </div>
+                </div>
+                <div className="trackerBlock">
+                    <PlayTracker
+                        startTime={startTime}
+                        endTime={endTime}
+                        id={seekerID + 'Block'}
+                        duration={duration}
+                        handleSeekBar={this.handleSeekBar}
+                    />
+                </div>
+            </div>
         );
     }
 }
@@ -445,7 +379,8 @@ class Player extends Component {
 const mapStateToProps = (state) => {
     return {
         players: state.players,
-        playlists: state.playlists
+        playlists: state.playlists,
+        spotifyPlayer: state.spotifyPlayer
     };
 };
 
