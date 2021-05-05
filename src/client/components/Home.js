@@ -122,7 +122,6 @@ class Home extends Component {
             Object.values(result.data).forEach((elem) => {
                 if (elem.id && elem.spotifyUri) {
                     songs[elem.spotifyUri] = {};
-                    songs[elem.spotifyUri]['ready'] = false;
                     songs[elem.spotifyUri]['duration'] = elem.duration;
                 }
             });

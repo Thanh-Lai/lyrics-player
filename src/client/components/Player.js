@@ -31,8 +31,9 @@ class Player extends Component {
         const key = `Spotify_${platform.name}`;
         const storage = JSON.parse(localStorage.getItem(key))
             ? JSON.parse(localStorage.getItem(key)) : {};
-
+        const token = storage.tokenInfo ? storage.tokenInfo.token : '';
         this.setState({
+            token,
             profileId: storage.profileInfo.id,
         });
         this.getPlaylists();
@@ -259,6 +260,7 @@ class Player extends Component {
 
     getPlaylists() {
         const { token, profileId } = this.state;
+        if (!profileId) return;
         fetch(`https://api.spotify.com/v1/users/${profileId}/playlists`, {
             method: 'GET',
             headers: {
