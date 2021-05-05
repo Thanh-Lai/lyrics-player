@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import platform from 'platform';
 import SearchBox from './SearchBox';
 import AllSongs from './AllSongs';
-import { updatePlayers, updateSpotifyPlayer } from '../store';
+import { updateSongs, updateSpotifyPlayer } from '../store';
 import '../app.css';
 import { API_KEY, ENV } from '../../../secrets';
 
@@ -118,15 +118,15 @@ class Home extends Component {
                 matchedResults: result.data,
                 clicked: true
             });
-            const playList = {};
+            const songs = {};
             Object.values(result.data).forEach((elem) => {
                 if (elem.id && elem.spotifyUri) {
-                    playList[elem.spotifyUri] = {};
-                    playList[elem.spotifyUri]['ready'] = false;
-                    playList[elem.spotifyUri]['duration'] = elem.duration;
+                    songs[elem.spotifyUri] = {};
+                    songs[elem.spotifyUri]['ready'] = false;
+                    songs[elem.spotifyUri]['duration'] = elem.duration;
                 }
             });
-            this.props.updatePlayersOnFetch(playList);
+            this.props.updateSongsOnFetch(songs);
         }
     }
 
@@ -148,11 +148,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        updatePlayersOnFetch: (players) => {
-            dispatch(updatePlayers(players));
+        updateSongsOnFetch: (songs) => {
+            dispatch(updateSongs(songs));
         },
-        setSpotifyPlayer: (players) => {
-            dispatch(updateSpotifyPlayer(players));
+        setSpotifyPlayer: (player) => {
+            dispatch(updateSpotifyPlayer(player));
         }
     };
 };

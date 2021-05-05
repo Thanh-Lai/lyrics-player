@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import platform from 'platform';
 import Playlist from './Playlist';
 import PlayTracker from './PlayTracker';
-import { updatePlayers, updatePlaylists } from '../store';
+import { updateSongs, updatePlaylists } from '../store';
 import '../style/player.css';
 
 class Player extends Component {
@@ -27,7 +27,7 @@ class Player extends Component {
 
     componentDidMount() {
         const currSongs = this.getCurrSongs();
-        this.props.updatePlayer(currSongs);
+        this.props.updateSongs(currSongs);
         const key = `Spotify_${platform.name}`;
         const storage = JSON.parse(localStorage.getItem(key))
             ? JSON.parse(localStorage.getItem(key)) : {};
@@ -50,7 +50,7 @@ class Player extends Component {
 
     onPlayClick(position) {
         const uri = this.props.uri;
-        const song = this.props.players[uri];
+        const song = this.props.songs[uri];
         const player = this.props.spotifyPlayer;
         if (!song['playing']) {
             this.play({
@@ -77,21 +77,20 @@ class Player extends Component {
                 position,
                 track_window
             } = state;
-            const currPlayList = { ...this.props.players };
+            const currSongs = { ...this.props.songs };
             const uri = track_window.current_track.uri;
-            const playList = {};
-            Object.keys(currPlayList).forEach((elem) => {
+            const songs = {};
+            Object.keys(currSongs).forEach((elem) => {
                 if (elem !== uri || paused) {
-                    clearInterval(currPlayList[elem]['playTimerInterval']);
+                    clearInterval(currSongs[elem]['playTimerInterval']);
                 }
-                playList[elem] = {};
-                playList[elem]['playing'] = (elem === uri) ? !paused : false;
-                playList[elem]['duration'] = currPlayList[elem]['duration'];
-                playList[elem]['playTimerInterval'] = (elem === uri) ? currPlayList[elem]['playTimerInterval'] : null;
-                playList[elem]['position'] = (elem === uri) ? position : currPlayList[elem]['position'];
-                playList[elem]['ready'] = true;
+                songs[elem] = {};
+                songs[elem]['playing'] = (elem === uri) ? !paused : false;
+                songs[elem]['duration'] = currSongs[elem]['duration'];
+                songs[elem]['playTimerInterval'] = (elem === uri) ? currSongs[elem]['playTimerInterval'] : null;
+                songs[elem]['position'] = (elem === uri) ? position : currSongs[elem]['position'];
             });
-            this.props.updatePlayer(playList);
+            this.props.updateSongs(songs);
         }
     }
 
@@ -183,9 +182,9 @@ class Player extends Component {
     }
 
     playTimer(currPosition, uri) {
-        const player = this.props.players[uri];
-        if (currPosition >= (Math.floor(player['duration'] / 1000) * 1000) - 2000) {
-            clearInterval(player['playTimerInterval']);
+        const song = this.props.songs[uri];
+        if (currPosition >= (Math.floor(song['duration'] / 1000) * 1000) - 2000) {
+            clearInterval(song['playTimerInterval']);
             this.moveSlider(`seeker-${uri}Block`, 500, '#C5C5C5');
             this.moveSlider(`seeker-${uri}Inline`, 500, '#C5C5C5');
             this.setState({ position: 0 });
@@ -201,8 +200,8 @@ class Player extends Component {
         const roundDown = (Math.floor(event.target.value / 1000) * 1000) - 5000;
         const value = roundDown < 0 ? 0 : Math.floor(roundDown);
         const uri = this.props.uri;
-        const player = this.props.players;
-        const isPlaying = player[uri] && player[uri]['playing'];
+        const songs = this.props.songs;
+        const isPlaying = songs[uri] && songs[uri]['playing'];
         if (isPlaying) {
             this.play({
                 spotify_uri: uri,
@@ -284,7 +283,7 @@ class Player extends Component {
     }
 
     getCurrSongs() {
-        const currSongs = { ...this.props.players };
+        const currSongs = { ...this.props.songs };
         const songList = {};
         Object.keys(currSongs).forEach((elem) => {
             songList[elem] = {};
@@ -292,20 +291,19 @@ class Player extends Component {
             songList[elem]['duration'] = currSongs[elem]['duration'];
             songList[elem]['playTimerInterval'] = null;
             songList[elem]['position'] = 0;
-            songList[elem]['ready'] = true;
         });
         return songList;
     }
 
     render() {
-        if (!Object.keys(this.props.players).length) return null;
-        const players = this.props.players;
+        if (!Object.keys(this.props.songs).length) return null;
+        const songs = this.props.songs;
         const uri = this.props.uri;
-        const duration = players[uri] ? players[uri]['duration'] : 0;
+        const duration = songs[uri] ? songs[uri]['duration'] : 0;
         const seekerID = `seeker-${uri}`;
         const volumnID = `volume-${uri}`;
         const playlistID = `playlist-${uri}`;
-        const isPlaying = players[uri] && players[uri]['playing'];
+        const isPlaying = songs[uri] && songs[uri]['playing'];
         const status = isPlaying ? 'fa fa-pause-circle-o pauseBtn' : 'fa fa-play-circle-o playBtn';
         const startTime = this.millisToMinsAndSecs(this.state.position);
         const endTime = this.millisToMinsAndSecs(duration);
@@ -378,7 +376,7 @@ class Player extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        players: state.players,
+        songs: state.songs,
         playlists: state.playlists,
         spotifyPlayer: state.spotifyPlayer
     };
@@ -386,8 +384,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        updatePlayer: (players) => {
-            dispatch(updatePlayers(players));
+        updateSongs: (songs) => {
+            dispatch(updateSongs(songs));
         },
         updatePlaylists: (playlists) => {
             dispatch(updatePlaylists(playlists));
