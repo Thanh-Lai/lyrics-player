@@ -4,7 +4,7 @@ import Player from './Player';
 import NoPlayer from './NoPlayer';
 import '../style/songContainers.css';
 
-export default function Container({ songInfo }) {
+export default function Container({ deviceID, songInfo }) {
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     const key = `Spotify_${platform.name}`;
     const storage = JSON.parse(localStorage.getItem(key));
@@ -41,7 +41,7 @@ export default function Container({ songInfo }) {
             <br />
             {(isSafari || noToken || !songInfo.spotifyUri || profile.product === 'open')
                 ? <NoPlayer isSafari={isSafari} token={token} product={profile.product} />
-                : <Player uri={songInfo.spotifyUri} />
+                : <Player deviceID={deviceID} uri={songInfo.spotifyUri} />
             }
         </div>
     );

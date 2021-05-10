@@ -3,7 +3,7 @@ import { usePromiseTracker } from 'react-promise-tracker';
 import Container from './Container';
 import '../style/songContainers.css';
 
-export default function AllSongs({ matchedResults, clicked }) {
+export default function AllSongs({ deviceID, matchedResults, clicked }) {
     const { promiseInProgress } = usePromiseTracker();
     const orderedSongs = Object.values(matchedResults).sort((a, b) => a.levenshteinDistance - b.levenshteinDistance);
     if (promiseInProgress) return (<div className="loaderRing" />);
@@ -13,7 +13,7 @@ export default function AllSongs({ matchedResults, clicked }) {
             {orderedSongs.map((elem) => {
                 const currSong = elem.id ? matchedResults[elem.id] : false;
                 if (currSong) {
-                    return <Container key={elem.id} songInfo={currSong} />;
+                    return <Container deviceID={deviceID} key={elem.id} songInfo={currSong} />;
                 }
             })}
         </div>
