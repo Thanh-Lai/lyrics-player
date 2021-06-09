@@ -111,6 +111,7 @@ class Home extends Component {
         const result = await trackPromise(axios.get(`${ENV}/textSearch?query=${uriEncodeInput}&type=${songOrLyric}`, {
             headers: {
                 Authorization: API_KEY,
+                'Access-Control-Allow-Origin': '*'
             }
         }));
         if (this.isMounted) {
