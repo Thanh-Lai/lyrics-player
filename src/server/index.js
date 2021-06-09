@@ -3,6 +3,7 @@ const path = require('path');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const compression = require('compression');
+const cors = require('cors');
 
 const PORT = process.env.PORT || 8080;
 const app = express();
@@ -12,6 +13,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const createApp = () => {
+    app.use(cors());
     // logging middleware
     app.use(morgan('dev'));
     // body parsing middleware
